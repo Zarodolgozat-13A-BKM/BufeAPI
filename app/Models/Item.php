@@ -13,6 +13,10 @@ class Item extends Model
         'price',
         'is_active',
         'default_time_to_deliver',
-
     ];
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->using(OrderItem::class)->withPivot('quantity');
+    }
 }
