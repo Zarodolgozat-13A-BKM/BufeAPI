@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
+use App\Policies\ItemPolicy;
 
+#[UsePolicy(ItemPolicy::class)]
 class Item extends Model
 {
     protected $fillable = [
