@@ -8,13 +8,25 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'order_identifier_number',
         'status',
-        'total_price',
+        'delivery_date',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function totalPrice()
+    {
+        return $this->items->sum(function ($item) {
+            return $item->price * $item->pivot->quantity;
+        });
+    }
+
+    public function completionTime(){
+        return $this->items()->sum('default_time_to_deliver');
     }
 
     public function items(){
