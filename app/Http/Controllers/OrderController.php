@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -23,13 +24,13 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'status' => 'required|string',
             'delivery_date' => 'nullable|date',
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
         ]);
+
+        $user = $request->user();
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
@@ -38,10 +39,10 @@ class OrderController extends Controller
         }
 
         $order = Order::create([
-            'user_id' => $data['user_id'],
+            'user_id' => $user->id,
             'order_identifier_number' => $number,
-            'status' => $data['status'],
-            'delivery_date' => $data['delivery_date'],
+            'status' => 'beérkezett',
+            'delivery_date' => $data['delivery_date'] ?? null,
         ]);
 
         foreach ($data['items'] as $itemData) {

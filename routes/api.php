@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\OrderController;
 
 Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
@@ -19,4 +20,10 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'delete');
     Route::post('/{id}/toggle-active', 'toggleItemActiveStatus');
+});
+
+Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get('/{id}', 'show');
 });
