@@ -12,11 +12,11 @@ Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::post('change-password', 'changePassword')->middleware('auth:sanctum');
     Route::post('forgot-password', 'forgotPassword');
 });
-Route::prefix('items')->controller(ItemController::class)->group(function () {
+Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/', 'create');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'delete');
     Route::post('/{id}/toggle-active', 'toggleItemActiveStatus');
-})->middleware('auth:sanctum');
+});

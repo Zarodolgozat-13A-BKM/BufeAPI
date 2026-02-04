@@ -60,7 +60,12 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::all()->find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Rendelés nem található'], 404);
+        }
+        $order->load('items');
+        return response()->json($order, 200);
     }
 
     /**

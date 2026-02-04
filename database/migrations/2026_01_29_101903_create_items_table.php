@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('picture_url')->nullable();
             $table->text('description')->nullable();
-            $table->decimal('price', 8, 2);
+            $table->integer('price');
             $table->boolean('is_active')->default(true);
             $table->integer('default_time_to_deliver'); // percekben van
         });
