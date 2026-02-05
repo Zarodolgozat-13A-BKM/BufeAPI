@@ -29,4 +29,10 @@ Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController:
     Route::get('/{id}', 'show');
 });
 
-Route::middleware('auth:sanctum')->prefix('categories')->apiResource('/', CategoryController::class);
+Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get('/{id}', 'show');
+    Route::put('/{id}', 'update');
+    Route::delete('/{id}', 'delete');
+});
