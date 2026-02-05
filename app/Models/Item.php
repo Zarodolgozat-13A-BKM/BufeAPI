@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
 use App\Policies\ItemPolicy;
 
-#[UsePolicy(ItemPolicy::class)]
 class Item extends Model
 {
     protected $fillable = [
@@ -16,7 +15,14 @@ class Item extends Model
         'price',
         'is_active',
         'default_time_to_deliver',
+        'is_featured',
+        'category_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function orders()
     {

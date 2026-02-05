@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Category;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Item>
@@ -23,6 +24,8 @@ class ItemFactory extends Factory
             'price' => fake()->randomNumber(4),
             'is_active' => fake()->boolean(80),
             'default_time_to_deliver' => fake()->numberBetween(1, 7),
+            'is_featured' => fake()->boolean(20),
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 }
