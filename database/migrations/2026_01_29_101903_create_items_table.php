@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('price');
             $table->boolean('is_active')->default(true);
             $table->integer('default_time_to_deliver'); // percekben van
+            $table->boolean('is_featured')->default(false);
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
         });
     }
 

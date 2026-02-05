@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CategoryController;
 
 Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
@@ -27,3 +28,5 @@ Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController:
     Route::post('/', 'store');
     Route::get('/{id}', 'show');
 });
+
+Route::middleware('auth:sanctum')->prefix('categories')->apiResource('/', CategoryController::class);

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use App\Policies\ItemPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+
+#[UsePolicy(ItemPolicy::class)]
 class ItemController extends Controller
 {
     //
@@ -32,6 +36,8 @@ class ItemController extends Controller
             'price' => 'required|numeric|min:0',
             'is_active' => 'required|boolean',
             'default_time_to_deliver' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'is_featured' => 'sometimes|boolean',
         ]);
         $item = Item::create($data);
         return response()->json(['message' => 'Termék sikeresen létrehozva', 'item' => $item], 201);
@@ -49,6 +55,8 @@ class ItemController extends Controller
             'price' => 'sometimes|required|numeric|min:0',
             'is_active' => 'sometimes|required|boolean',
             'default_time_to_deliver' => 'sometimes|required|integer|min:0',
+            'category_id' => 'sometimes|required|exists:categories,id',
+            'is_featured' => 'sometimes|boolean',
         ]);
         $item->update($data);
         return response()->json(['message' => 'Termék sikeresen frissítve', 'item' => $item], 200);

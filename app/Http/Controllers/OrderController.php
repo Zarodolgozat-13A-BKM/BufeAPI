@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Policies\OrderPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
+#[UsePolicy(OrderPolicy::class)]
 class OrderController extends Controller
 {
     /**
@@ -82,6 +85,11 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $order = Order::all()->find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Rendelés nem található'], 404);
+        }
+        $order->delete();
+        return response()->json(['message' => 'Rendelés sikeresen törölve'], 200);
     }
 }
