@@ -8,6 +8,8 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\ItemSeeder;
 use Database\Seeders\OrderSeeder;
 use Database\Seeders\OrderItemSeeder;
+use Database\Seeders\StatusSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -19,6 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            StatusSeeder::class,
             CategorySeeder::class,
             ItemSeeder::class,
             OrderSeeder::class,

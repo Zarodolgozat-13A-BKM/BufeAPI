@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 
@@ -20,7 +21,7 @@ class OrderFactory extends Factory
         return [
             'order_identifier_number' => fake()->unique()->numberBetween(1, 98),
             'user_id' => User::inRandomOrder()->first()->id,
-            'status' => fake()->randomElement(['beérkezett', 'feldolgozás alatt', 'teljesítve', 'kész', 'lemondva']),
+            'status_id' => Status::inRandomOrder()->first()->id,
             'delivery_date' => fake()->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
         ];
     }
