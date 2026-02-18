@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -52,19 +53,36 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
+        $request->validate([
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok'], 401);
+
+        $credentials = ['email' => $request->username, 'password' => $request->password];
+
+        if (Auth::validate($credentials)) {
+            $user = Auth::getLastAttempted();
+            return response()->json([
+                'access_token' => $user->createToken('auth_token')->plainTextToken,
+                'token_type' => 'Bearer',
+            ]);
         }
-        $user = User::where('email', $request->email)->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        // if (!$ldapUser || !$ldapUser->authenticate($password)) {
+        //     return response()->json(['message' => 'Érvénytelen bejelentkezési adatok'], 401);
+        // }
+        // if (!Auth::attempt($credentials)) {
+        //     return response()->json(['message' => 'Érvénytelen bejelentkezési adatok'], 401);
+        // }
+        // error_log($ldapUser);
+        // $user = User::firstOrCreate(
+        //     ['email' => $ldapUser->getEmail()],
+        //     ['name' => $ldapUser->getCommonName(), 'password' => bcrypt($password), 'role' => 'user']
+        // );
+        // $token = $user->createToken('auth_token')->plainTextToken;
+        // return response()->json([
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer',
+        // ]);
     }
 
     public function logout(Request $request)
