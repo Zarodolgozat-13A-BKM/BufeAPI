@@ -14,6 +14,7 @@ WORKDIR /var/www/html
 
 # Copy project
 COPY . .
+RUN docker-php-ext-install pdo pdo_mysql mbstring xml
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
