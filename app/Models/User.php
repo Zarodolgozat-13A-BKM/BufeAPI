@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements LdapAuthenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, AuthenticatesWithLdap;
 
     /**
      * The attributes that are mass assignable.
@@ -52,5 +54,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
 }

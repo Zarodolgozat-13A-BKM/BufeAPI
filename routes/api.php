@@ -8,11 +8,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
 
 Route::prefix('account')->controller(AuthController::class)->group(function () {
-    Route::post('register', 'register');
     Route::post('login', 'login');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
-    Route::post('change-password', 'changePassword')->middleware('auth:sanctum');
-    Route::post('forgot-password', 'forgotPassword');
 });
 Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
     Route::get('/', 'index');
