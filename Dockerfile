@@ -1,10 +1,16 @@
 # Base image
 FROM php:8.2-fpm
 
-# Install dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libonig-dev \
-    && docker-php-ext-install pdo_mysql mbstring zip
+    git \
+    unzip \
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    default-mysql-client \
+    && docker-php-ext-install pdo pdo_mysql mbstring xml zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -14,7 +20,6 @@ WORKDIR /var/www/html
 
 # Copy project
 COPY . .
-RUN docker-php-ext-install pdo pdo_mysql mbstring xml
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
