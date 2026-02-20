@@ -14,8 +14,11 @@ spec:
       containers:
         - name: bufe-api
           # image: ghcr.io/milanmarko/laravel-app:latest
-          # image: cr.jedlik.cloud/mm-bufeapi:latest
-          image: ghcr.io/milanmarko/bufe-api:latest
+          image: cr.jedlik.cloud/mm-bufeapi:latest
+          # image: ghcr.io/milanmarko/bufe-api:latest
+          imagePullSecrets:
+            - name: ghcr-auth
+
           ports:
             - containerPort: 8000
           env:
