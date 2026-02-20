@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bufe-api-deployment
+spec:
+  selector:
+    matchLabels:
+      app: bufe-api
+  template:
+    metadata:
+      labels:
+        app: bufe-api
+    spec:
+      containers:
+        - name: bufe-api
+          # image: ghcr.io/milanmarko/laravel-app:latest
+          image: cr.jedlik.cloud/mm-bufeapi:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: APP_URL
+              value: "http://bufeapi-markomilan.jcloud.jedlik.cloud"
+            - name: APP_ENV
+              value: "production"
+            - name: APP_DEBUG
+              value: "false"
+            - name: DB_PASSWORD
+              value: "mokZsub3Gy"
+            # - name: DB_USERNAME
+            #   value: "bufe"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bufe-api-cluster-ip-service
+spec:
+  selector:
+    app: bufe-api
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      targetPort: 8000
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bufe-api-ingress
+spec:
+  ingressClassName: nginx
+
+  rules:
+    - host: bufeapi-markomilan.jcloud.jedlik.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bufe-api-cluster-ip-service
+                port:
+                  number: 80

@@ -22,8 +22,17 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
+COPY .env.example .env
+
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
+RUN php artisan key:generate
+RUN php artisan config:cache
+RUN php artisan storage:link
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN php artisan optimize
+RUN php artisan route:cache
 
-EXPOSE 9000
-CMD ["php-fpm"]
+EXPOSE 8000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
