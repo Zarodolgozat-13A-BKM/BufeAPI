@@ -46,4 +46,4 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
       - name: Deploy with env substitution
         run: |
-          envsubst < k8s/deployment.yaml | kubectl apply -f -
+          envsubst < deployment.yaml | kubectl apply -f -
