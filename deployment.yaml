@@ -14,20 +14,57 @@ spec:
       containers:
         - name: bufe-api
           # image: ghcr.io/milanmarko/laravel-app:latest
-          image: cr.jedlik.cloud/mm-bufeapi:latest
+          # image: cr.jedlik.cloud/mm-bufeapi:latest
+          image: ghcr.io/milanmarko/bufe-api:latest
           ports:
             - containerPort: 8000
           env:
             - name: APP_URL
               value: "http://bufeapi-markomilan.jcloud.jedlik.cloud"
+            - name: APP_NAME
+              value: "BufeAPI"
             - name: APP_ENV
               value: "production"
             - name: APP_DEBUG
               value: "false"
+            - name: DB_CONNECTION
+              value: "mysql"
             - name: DB_PASSWORD
-              value: "mokZsub3Gy"
-            # - name: DB_USERNAME
-            #   value: "bufe"
+              value: "${DB_PASSWORD}"
+            - name: DB_USERNAME
+              value: "marko.milan"
+            - name: DB_HOST
+              value: "jcloud02.jedlik.eu"
+            - name: DB_DATABASE
+              value: "marko_milan_db_2"
+            - name: DB_PORT
+              value: "3306"
+            - name: APP_KEY
+              value: "${APP_KEY}"
+            - name: LDAP_CACHE
+              value: "false"
+            - name: LDAP_LOGGING
+              value: "false"
+            - name: LDAP_CONNECTION
+              value: "default"
+            - name: LDAP_HOST
+              value: "jdc.jedlik.eu"
+            - name: LDAP_USERNAME
+              value: "cn=Vendég,ou=Idegen,dc=jedlik,dc=helyi"
+            - name: LDAP_PASSWORD
+              value: "${LDAP_PASSWORD}"
+            - name: LDAP_PORT
+              value: "389"
+            - name: LDAP_BASE_DN
+              value: "dc=jedlik,dc=helyi"
+            - name: LDAP_TIMEOUT
+              value: "5"
+            - name: LDAP_SSL
+              value: "false"
+            - name: LDAP_TLS
+              value: "false"
+            - name: LDAP_SASL
+              value: "false"
 
 ---
 apiVersion: v1

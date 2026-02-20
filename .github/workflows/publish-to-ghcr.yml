@@ -1,4 +1,4 @@
-name: Build and Deploy Laravel Docker
+name: Build Docker Image, Push to GHCR, and Deploy to Kubernetes
 
 on:
   push:
@@ -9,24 +9,41 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      APP_KEY: ${{ secrets.APP_KEY }}
+      LDAP_PASSWORD: ${{ secrets.LDAP_PASSWORD }}
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: milanmarko
-        password: ${{ secrets.PACKAGE_RW_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: milanmarko
+          password: ${{ secrets.PACKAGE_RW_TOKEN }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: ghcr.io/milanmarko/laravel-app:latest
-        file: ./Dockerfile
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/milanmarko/bufe-api:latest
+          file: ./Dockerfile
+
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
+      - name: Deploy with env substitution
+        run: |
+          envsubst < k8s/deployment.yaml | kubectl apply -f -

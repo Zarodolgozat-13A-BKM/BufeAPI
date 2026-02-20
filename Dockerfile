@@ -22,11 +22,11 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
-COPY .env.example .env
+# COPY .env.example .env
 
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
-RUN php artisan key:generate
+# RUN php artisan key:generate
 RUN php artisan config:cache
 RUN php artisan storage:link
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
