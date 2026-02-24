@@ -14,8 +14,8 @@ spec:
       containers:
         - name: bufe-api
           # image: ghcr.io/milanmarko/laravel-app:latest
-          image: cr.jedlik.cloud/mm-bufeapi:latest
-          # image: ghcr.io/milanmarko/bufe-api:latest
+          # image: cr.jedlik.cloud/mm-bufeapi:latest
+          image: ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
           # imagePullSecrets:
           #   - name: ghcr-auth
 
