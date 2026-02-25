@@ -17,7 +17,8 @@ spec:
         - name: bufe-api
           # image: ghcr.io/milanmarko/laravel-app:latest
           # image: cr.jedlik.cloud/mm-bufeapi:latest
-          image: ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
+          image: ghcr.io/milanmarko/zarodolgozat-bufe-api
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 8000
