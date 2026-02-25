@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
@@ -22,7 +23,7 @@ class AuthController extends Controller
 
         $credentials = ['samaccountname' => $request->username, 'password' => $request->password];
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden'=>User::all()], 401);
+            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden'=>Item::all()], 401);
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
