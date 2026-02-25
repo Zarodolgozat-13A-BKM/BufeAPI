@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - kube
 
 jobs:
   build-and-push:
@@ -46,4 +47,5 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
       - name: Deploy with env substitution
         run: |
-          kubectl delete -f - | envsubst < deployment.yaml | kubectl apply -f -
+          kubectl delete -f -
+          envsubst < deployment.yaml | kubectl apply -f -
