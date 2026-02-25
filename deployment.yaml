@@ -27,9 +27,9 @@ spec:
             - name: APP_NAME
               value: "BufeAPI"
             - name: APP_ENV
-              value: "local"
+              value: "production"
             - name: APP_DEBUG
-              value: "true"
+              value: "false"
             - name: DB_CONNECTION
               value: "mysql"
             - name: DB_PASSWORD
@@ -68,6 +68,16 @@ spec:
               value: "false"
             - name: LDAP_SASL
               value: "false"
+            - name: SESSION_DRIVER
+              value: "database"
+            - name: SESSION_LIFETIME
+              value: "120"
+            - name: SESSION_ENCRYPT
+              value: "false"
+            - name: SESSION_PATH
+              value: "/"
+            - name: SESSION_DOMAIN
+              value: "null"
 
 ---
 apiVersion: v1
