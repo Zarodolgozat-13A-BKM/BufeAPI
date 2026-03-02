@@ -25,7 +25,7 @@ class AuthController extends Controller
         $credentials = ['samaccountname' => $request->username, 'password' => $request->password];
         if (!Auth::attempt($credentials)) {
             try {
-                return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden' => User::all()], 401);
+                return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden' => config("database.default")], 401);
             } catch (\Exception $e) {
                 return response()->json(['message' => 'Hiba történt a bejelentkezés során', 'error' => $e->getMessage()], 500);
             }
