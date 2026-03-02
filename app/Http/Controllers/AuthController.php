@@ -24,7 +24,7 @@ class AuthController extends Controller
 
         $credentials = ['samaccountname' => $request->username, 'password' => $request->password];
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden'=>DB::connection('mysql')->getDatabaseName()], 401);
+            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden' => env('DB_HOST')], 401);
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
