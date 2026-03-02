@@ -57,7 +57,7 @@ spec:
             - configMapRef:
                 name: bufeapi-laravelapp-config
             - secretRef:
-                name: bufeapi-laravelapp-secret
+                name: bufeapi-prod-secret
 
 ---
 apiVersion: v1
