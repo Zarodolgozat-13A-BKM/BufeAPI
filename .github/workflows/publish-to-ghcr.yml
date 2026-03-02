@@ -10,11 +10,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    env:
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      APP_KEY: ${{ secrets.APP_KEY }}
-      LDAP_PASSWORD: ${{ secrets.LDAP_PASSWORD }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,13 +23,15 @@ jobs:
           registry: ghcr.io
           username: milanmarko
           password: ${{ secrets.PACKAGE_RW_TOKEN }}
+      - name: "Generate image tag from time"
+        run: echo "IMAGE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
+          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:${{ env.IMAGE_TAG }}
           file: ./Dockerfile
 
       - uses: azure/setup-kubectl@v4
@@ -48,4 +45,4 @@ jobs:
       - name: Deploy with env substitution
         run: |
           kubectl delete -f -
-          envsubst < deployment.yaml | kubectl apply -f -
+          kubectl apply -f -
