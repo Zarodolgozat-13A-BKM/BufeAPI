@@ -33,5 +33,5 @@ RUN php artisan optimize
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-EXPOSE 9000
+EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]
