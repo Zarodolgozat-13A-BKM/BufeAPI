@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:${{ env.IMAGE_TAG }}
+          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:${{ env.IMAGE_TAG }} , ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
           file: ./Dockerfile
 
       - uses: azure/setup-kubectl@v4
