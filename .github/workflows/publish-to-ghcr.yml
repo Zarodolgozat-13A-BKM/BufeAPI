@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
-      - name: Deploy with env substitution
+      - name: Deploy to Kubernetes
         run: |
-          kubectl delete -f -
-          kubectl apply -f -
+          kubectl delete -f deployment.yaml --ignore-not-found
+          kubectl apply -f deployment.yaml
