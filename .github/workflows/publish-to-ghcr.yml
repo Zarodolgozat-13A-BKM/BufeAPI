@@ -4,15 +4,11 @@ on:
   push:
     branches:
       - main
+      - kube
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
-    env:
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      APP_KEY: ${{ secrets.APP_KEY }}
-      LDAP_PASSWORD: ${{ secrets.LDAP_PASSWORD }}
 
     steps:
       - name: Checkout repository
@@ -27,23 +23,25 @@ jobs:
           registry: ghcr.io
           username: milanmarko
           password: ${{ secrets.PACKAGE_RW_TOKEN }}
+      - name: "Generate image tag from time"
+        run: echo "IMAGE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
+          tags: ghcr.io/milanmarko/zarodolgozat-bufe-api:${{ env.IMAGE_TAG }} , ghcr.io/milanmarko/zarodolgozat-bufe-api:latest
           file: ./Dockerfile
 
       - uses: azure/setup-kubectl@v4
         with:
           version: latest
-
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
-      - name: Deploy with env substitution
+      - name: Deploy to Kubernetes
         run: |
-          kubectl delete -f - | envsubst < deployment.yaml | kubectl apply -f -
+          kubectl delete -f deployment.yaml --ignore-not-found
+          kubectl apply -f deployment.yaml

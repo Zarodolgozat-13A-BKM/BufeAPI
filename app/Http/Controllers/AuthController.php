@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+use Illuminate\Support\Facades\DB;
 
 use function Laravel\Prompts\error;
 
@@ -22,7 +24,11 @@ class AuthController extends Controller
 
         $credentials = ['samaccountname' => $request->username, 'password' => $request->password];
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden'=>User::all()], 401);
+            try {
+                return response()->json(['message' => 'Érvénytelen bejelentkezési adatok', 'minden' => User::all()], 401);
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Hiba történt a bejelentkezés során', 'error' => $e->getMessage()], 500);
+            }
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
