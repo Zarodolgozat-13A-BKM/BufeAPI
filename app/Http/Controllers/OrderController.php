@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Status;
 use App\Models\User;
 use App\Policies\OrderPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
@@ -17,8 +19,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('items')->paginate(request()->get('per_page', 15), ['*'], 'page', request()->get('page', 1));
-        return response()->json($orders, 200);
+        return response()->json(OrderResource::collection(Order::all()), 200);
     }
 
     /**
@@ -37,14 +38,14 @@ class OrderController extends Controller
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
-        if($lastNumber != 100){
+        if ($lastNumber != 100) {
             $number = $lastNumber + 1;
         }
 
         $order = Order::create([
             'user_id' => $user->id,
             'order_identifier_number' => $number,
-            'status' => 'beérkezett',
+            'status_id' => Status::where('name', 'beérkezett')->first()->id,
             'delivery_date' => $data['delivery_date'] ?? null,
         ]);
 

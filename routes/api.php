@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 
 Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
+    Route::get('me', 'me')->middleware('auth:sanctum');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
 Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
