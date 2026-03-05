@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ItemResource;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\ItemPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Support\Facades\Storage;
 
 #[UsePolicy(ItemPolicy::class)]
 class ItemController extends Controller
@@ -31,7 +33,7 @@ class ItemController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'picture_url' => 'nullable|url',
+            'image' => 'sometimes|file',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'is_active' => 'required|boolean',
@@ -39,8 +41,13 @@ class ItemController extends Controller
             'category_id' => 'required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
         ]);
+        $url = null;
+        if ($request->hasFile('image')) {
+            $url = $request->file('image')->store('itemImages', 'public');
+        }
+        $data['picture_url'] = $url;
         $item = Item::create($data);
-        return response()->json(['message' => 'Termék sikeresen létrehozva', 'item' => $item], 201);
+        return response()->json(new ItemResource($item), 201);
     }
     public function update(Request $request, $id)
     {
@@ -58,14 +65,23 @@ class ItemController extends Controller
             'category_id' => 'sometimes|required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
         ]);
+        $url = null;
+        if ($request->hasFile('image')) {
+            $url = $request->file('image')->store('itemImages', 'public');
+        }
+        $data['picture_url'] = $url;
+        $item = Item::create($data);
         $item->update($data);
-        return response()->json(['message' => 'Termék sikeresen frissítve', 'item' => $item], 200);
+        return response()->json(new ItemResource($item), 200);
     }
     public function delete(Request $request, $id)
     {
         $item = Item::find($id);
         if (!$item) {
             return response()->json(['message' => 'Nincs ilyen termék'], 404);
+        }
+        if (Storage::disk('public')->exists($item->picture_url)) {
+            Storage::disk('public')->delete($item->picture_url);
         }
         $item->delete();
         return response()->json(['message' => 'Termék sikeresen törölve'], 200);
@@ -76,8 +92,7 @@ class ItemController extends Controller
         if (!$item) {
             return response()->json(['message' => 'Nincs ilyen termék'], 404);
         }
-        $item->is_active = !$item->is_active;
-        $item->save();
+        $item->toggleActive();
         return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => $item], 200);
     }
 }

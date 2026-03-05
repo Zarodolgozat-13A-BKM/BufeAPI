@@ -19,6 +19,11 @@ class Item extends Model
         'category_id',
     ];
 
+    public function toggleActive()
+    {
+        $this->is_active = !$this->is_active;
+        $this->save();
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);

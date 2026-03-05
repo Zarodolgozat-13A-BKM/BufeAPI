@@ -20,7 +20,7 @@ class ItemPolicy
     {
         return $user->role === 'admin';
     }
-    public function delete(User $user, Item $item): bool
+    public function delete(User $user): bool
     {
         return $user->role === 'admin';
     }
