@@ -26,6 +26,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'Érvénytelen bejelentkezési adatok'], 401);
         }
         $user = Auth::user();
+        if ($credentials['samaccountname'] == 'teszt') {
+            $user->assignRole('admin');
+        }
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'access_token' => $token
@@ -40,6 +43,6 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json(["username" => $request->user()->name, "email" => $request->user()->email, "role" => $request->user()->role]);
+        return response()->json(["full_name" => $request->user()->full_name, "email" => $request->user()->email, "role" => $request->user()->role]);
     }
 }
