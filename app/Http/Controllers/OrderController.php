@@ -7,11 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Status;
-use App\Models\User;
-use App\Policies\OrderPolicy;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 
-#[UsePolicy(OrderPolicy::class)]
 class OrderController extends Controller
 {
     /**
@@ -19,7 +17,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return response()->json(OrderResource::collection(Order::all()), 200);
+        return response()->json(
+            OrderResource::collection(Order::all()->where(fn($item) => Gate::allows('view', $item))),
+            200
+        );
     }
 
     /**

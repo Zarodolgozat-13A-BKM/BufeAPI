@@ -70,8 +70,9 @@ return [
                 'model' => App\Models\User::class,
                 'sync_passwords' => false,
                 'sync_attributes' => [
-                    'name' => 'cn',
+                    'username' => 'samaccountname',
                     'email' => 'mail',
+                    'full_name' => 'displayname'
                 ],
                 "sync_existing" => [
                     'email' => 'mail',

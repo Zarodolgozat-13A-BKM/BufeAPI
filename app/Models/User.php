@@ -21,7 +21,8 @@ class User extends Authenticatable implements LdapAuthenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'full_name',
         'email',
         'password',
         'role'
@@ -30,6 +31,12 @@ class User extends Authenticatable implements LdapAuthenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function assignRole($role)
+    {
+        $this->role = $role;
+        $this->save();
     }
 
     /**
