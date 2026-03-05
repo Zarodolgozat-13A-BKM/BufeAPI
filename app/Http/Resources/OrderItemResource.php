@@ -18,7 +18,7 @@ class OrderItemResource extends JsonResource
             'item_id' => $this->id,
             'item_name' => $this->name,
             'item_price' => $this->price,
-            'item_image' => $this->picture_url,
+            'picture_url' => env('APP_URL') . '/' . $this->picture_url,
             'quantity' => $this->pivot->quantity,
             'price' => $this->pivot->quantity * $this->price
         ];
