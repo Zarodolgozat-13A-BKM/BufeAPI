@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Policies\CategoryPolicy;
@@ -15,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('items')->get();
+        $categories = CategoryResource::collection(Category::with('items')->get());
         return response()->json($categories);
     }
 
