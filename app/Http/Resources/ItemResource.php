@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ItemResource extends JsonResource
 {
@@ -23,7 +24,7 @@ class ItemResource extends JsonResource
             'default_time_to_deliver' => $this->default_time_to_deliver,
             'category_id' => $this->category_id,
             'is_featured' => $this->is_featured,
-            'picture_url' => url('/') . '/' . $this->picture_url
+            'picture_url' => url('/') . Storage::url($this->picture_url)
         ];
     }
 }
