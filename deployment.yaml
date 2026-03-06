@@ -44,6 +44,7 @@ spec:
       labels:
         app: bufe-api
     spec:
+      restartPolicy: Always
       imagePullSecrets:
         - name: ghcr-login-secret
       containers:

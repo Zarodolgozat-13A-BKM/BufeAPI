@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+ulimit -n 65535
 php artisan config:clear
 php artisan config:cache
 php artisan route:cache
