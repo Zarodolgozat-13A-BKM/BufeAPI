@@ -32,8 +32,8 @@ data:
   BROADCAST_DRIVER: "redis"
   REDIS_CLIENT: "phpredis"
   REDIS_HOST: "https://bufeapi.jcloud.jedlik.cloud"
-  REDIS_PASSWORD: null
-  REDIS_PORT: 6379
+  REDIS_PASSWORD: "null"
+  REDIS_PORT: "6379"
 
 ---
 apiVersion: apps/v1
