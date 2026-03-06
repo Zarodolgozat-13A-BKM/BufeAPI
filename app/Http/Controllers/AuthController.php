@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
-use function Laravel\Prompts\error;
 
 class AuthController extends Controller
 {
