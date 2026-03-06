@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libldap2-dev \
     default-mysql-client \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
-    && docker-php-ext-install pdo pdo_mysql mbstring xml zip ldap \
+    && docker-php-ext-install pdo pdo_mysql mbstring xml zip ldap pcntl sockets \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
@@ -34,4 +34,5 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
+EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
