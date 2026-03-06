@@ -28,6 +28,12 @@ data:
   SESSION_ENCRYPT: "false"
   SESSION_PATH: "/"
   SESSION_DOMAIN: "null"
+  BROADCAST_CONNECTION: "reverb"
+  REVERB_HOST: "bufeapi-markomilan.jcloud.jedlik.cloud"
+  REVERB_PORT: 8080
+  REVERB_SCHEME: "http"
+  FRONTEND_URL: "http://bufe.jcloud.jedlik.cloud"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -58,6 +64,8 @@ spec:
                 name: bufeapi-laravelapp-config
             - secretRef:
                 name: bufeapi-prod-secret
+            - secretRef:
+                name: bufeapi-reverb-secret
 
 ---
 apiVersion: v1
