@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: bufeapi-laravelapp-config
 data:
-  APP_URL: "http://bufeapi-markomilan.jcloud.jedlik.cloud"
+  APP_URL: "http://bufeapi.jcloud.jedlik.cloud"
   APP_NAME: "BufeAPI"
   APP_ENV: "production"
   APP_DEBUG: "false"
@@ -28,6 +28,8 @@ data:
   SESSION_ENCRYPT: "false"
   SESSION_PATH: "/"
   SESSION_DOMAIN: "null"
+  FRONTEND_URL: "http://bufe.jcloud.jedlik.cloud"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,19 +48,21 @@ spec:
         - name: ghcr-login-secret
       containers:
         - name: bufe-api
-          # image: ghcr.io/milanmarko/laravel-app:latest
-          # image: cr.jedlik.cloud/mm-bufeapi:latest
-          image: ghcr.io/milanmarko/zarodolgozat-bufe-api
+          image: ghcr.io/zarodolgozat-13a-bkm/zarodolgozat-bufe-api
           imagePullPolicy: Always
 
           ports:
-            - containerPort: 8000
+            - name: http
+              containerPort: 8000
+            - name: websocket
+              containerPort: 8080
           envFrom:
             - configMapRef:
                 name: bufeapi-laravelapp-config
             - secretRef:
                 name: bufeapi-prod-secret
-
+            - secretRef:
+                name: bufeapi-reverb-secret
 ---
 apiVersion: v1
 kind: Service
@@ -70,18 +74,45 @@ spec:
   type: ClusterIP
   ports:
     - protocol: TCP
+      name: http
       targetPort: 8000
       port: 80
+    - protocol: TCP
+      name: websocket
+      targetPort: 8080
+      port: 8080
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bufeapi-certificate
+spec:
+  secretName: bufeapi-certificate
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - bufeapi-markomilan.jcloud.jedlik.cloud
+    - bufeapi-ws.jcloud.jedlik.cloud
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: bufe-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
-
+  tls:
+    - hosts:
+        - bufeapi.jcloud.jedlik.cloud
+        - bufeapi-ws.jcloud.jedlik.cloud
+      secretName: bufeapi-certificate
   rules:
-    - host: bufeapi-markomilan.jcloud.jedlik.cloud
+    - host: bufeapi.jcloud.jedlik.cloud
       http:
         paths:
           - path: /
@@ -91,4 +122,14 @@ spec:
                 name: bufe-api-cluster-ip-service
                 port:
                   number: 80
+    - host: bufeapi-ws.jcloud.jedlik.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bufe-api-cluster-ip-service
+                port:
+                  number: 8080
 ---
