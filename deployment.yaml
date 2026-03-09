@@ -31,6 +31,24 @@ data:
   FRONTEND_URL: "http://bufe.jcloud.jedlik.cloud"
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bufeapi-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+  # volumeName: mariadb-test-pv
+  #CSAK itt a Jedlikben
+  selector:
+    matchLabels:
+      student: marko-milan
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,6 +81,13 @@ spec:
                 name: bufeapi-prod-secret
             - secretRef:
                 name: bufeapi-reverb-secret
+      #     volumeMounts:
+      #       - name: bufeapi-storage
+      #         mountPath: /var/www/html/storage/app/public
+      # volumes:
+      #   - name: bufeapi-storage
+      #     persistentVolumeClaim:
+      #       claimName: bufeapi-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -92,7 +117,7 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - bufeapi-markomilan.jcloud.jedlik.cloud
+    - bufeapi.jcloud.jedlik.cloud
     - bufeapi-ws.jcloud.jedlik.cloud
 
 ---

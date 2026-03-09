@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - kube
+      - milanmarko/*
   workflow_dispatch:
 
 jobs:
