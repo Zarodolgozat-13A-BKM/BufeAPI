@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrderSubmitted;
+use App\Events\OrderStateChanged;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -39,7 +41,7 @@ class OrderController extends Controller
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
-        if ($lastNumber != 100) {
+        if ($lastNumber >= 100) {
             $number = $lastNumber + 1;
         }
 
@@ -58,7 +60,8 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Rendelés sikeresen leadva', 'order' => $order, 'completion_time' => $order->completionTime()], 201);
+        broadcast(new NewOrderSubmitted($order))->toOthers();
+        return response()->json(['message' => 'Rendelés sikeresen leadva', 'order' => new OrderResource($order)], 201);
     }
 
     /**
@@ -71,7 +74,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Rendelés nem található'], 404);
         }
         $order->load('items');
-        return response()->json($order, 200);
+        return response()->json(new OrderResource($order), 200);
     }
 
     /**
@@ -79,7 +82,19 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $order = Order::all()->find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Rendelés nem található'], 404);
+        }
+
+        $data = $request->validate([
+            'status_id' => 'required|exists:statuses,id',
+            'delivery_date' => 'nullable|date',
+        ]);
+
+        $order->update($data);
+        broadcast(new OrderStateChanged($order));
+        return response()->json(['message' => 'Rendelés sikeresen frissítve', 'order' => new OrderResource($order)], 200);
     }
 
     /**

@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/', 'create')->can('create', Item::class);
-    Route::put('/{id}', 'update')->can('update', Item::class);
+    Route::patch('/{id}', 'update')->can('update', Item::class);
     Route::delete('/{id}', 'delete')->can('delete', Item::class);
     Route::post('/{id}/toggle-active', 'toggleItemActiveStatus')->can('update', Item::class);
 });
@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
 Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store')->can('create', Order::class);
+    Route::patch('/{id}', 'update');
     Route::get('/{id}', 'show')->can('view', Order::class);
 });
 
@@ -36,6 +37,6 @@ Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryCont
     Route::get('/', 'index');
     Route::post('/', 'store')->can('create', Category::class);
     Route::get('/{id}', 'show');
-    Route::put('/{id}', 'update')->can('update', Category::class);
+    Route::patch('/{id}', 'update')->can('update', Category::class);
     Route::delete('/{id}', 'delete')->can('delete', Category::class);
 });
