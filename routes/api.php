@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
 
 Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'index');
-    Route::post('/', 'store')->can('create', Order::class);
+    // Route::post('/', 'store')->can('create', Order::class);
     Route::patch('/{id}', 'update');
     Route::get('/{id}', 'show')->can('view', Order::class);
 });
@@ -39,4 +40,9 @@ Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryCont
     Route::get('/{id}', 'show');
     Route::patch('/{id}', 'update')->can('update', Category::class);
     Route::delete('/{id}', 'delete')->can('delete', Category::class);
+});
+
+Route::middleware('auth:sanctum')->prefix('payment')->controller((PaymentController::class))->group(function () {
+    Route::post('/checkout', 'checkout');
+    Route::post('/webhook', 'handle');
 });

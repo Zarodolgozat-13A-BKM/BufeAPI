@@ -88,8 +88,8 @@ class OrderController extends Controller
         }
 
         $data = $request->validate([
-            'status_id' => 'required|exists:statuses,id',
-            'delivery_date' => 'nullable|date',
+            'status_id' => 'sometimes|exists:statuses,id',
+            'delivery_date' => 'sometimes|date',
         ]);
 
         $order->update($data);

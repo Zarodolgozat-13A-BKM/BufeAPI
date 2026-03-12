@@ -14,6 +14,6 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        StatusFactory::new()->count(5)->create();
+        StatusFactory::new()->count(6)->create();
     }
 }

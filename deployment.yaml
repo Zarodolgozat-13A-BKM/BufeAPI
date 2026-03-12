@@ -68,6 +68,8 @@ spec:
                 name: bufeapi-prod-secret
             - secretRef:
                 name: bufeapi-reverb-secret
+            - secretRef:
+                name: bufe-api-stripe-secret
       #     volumeMounts:
       #       - name: bufeapi-storage
       #         mountPath: /var/www/html/storage/app/public

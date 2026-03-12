@@ -19,7 +19,7 @@ class ItemFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-            'picture_url' => fake()->imageUrl(),
+            // 'picture_url' => fake()->imageUrl(),
             'description' => fake()->sentence(),
             'price' => fake()->randomNumber(4),
             'is_active' => fake()->boolean(80),
