@@ -31,6 +31,7 @@ class PaymentController extends Controller
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
+            'comment' => 'sometimes|string|max:255'
         ]);
 
         $user = $request->user();
@@ -38,11 +39,14 @@ class PaymentController extends Controller
             $itemModel = Item::find($item['item_id']);
             return $itemModel->price * $item['quantity'];
         });
+        if ($amount <= 200) {
+            $amount = 200;
+        }
         $intent = $this->stripe->createPaymentIntent($amount);
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
-        if ($lastNumber >= 100) {
+        if ($lastNumber <= 100) {
             $number = $lastNumber + 1;
         }
 
@@ -62,7 +66,7 @@ class PaymentController extends Controller
             ]);
         }
 
-        broadcast(new NewOrderSubmitted($order))->toOthers();
+        // broadcast(new NewOrderSubmitted($order))->toOthers();
 
         return response()->json([
             'client_secret' => $intent->client_secret,

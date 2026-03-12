@@ -30,38 +30,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'delivery_date' => 'nullable|date',
-            'items' => 'required|array',
-            'items.*.item_id' => 'required|exists:items,id',
-            'items.*.quantity' => 'required|integer|min:1',
-        ]);
-
-        $user = $request->user();
-
-        $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
-        $number = 1;
-        if ($lastNumber >= 100) {
-            $number = $lastNumber + 1;
-        }
-
-        $order = Order::create([
-            'user_id' => $user->id,
-            'order_identifier_number' => $number,
-            'status_id' => Status::where('name', 'beérkezett')->first()->id,
-            'delivery_date' => $data['delivery_date'] ?? null,
-        ]);
-
-        foreach ($data['items'] as $itemData) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $itemData['item_id'],
-                'quantity' => $itemData['quantity'],
-            ]);
-        }
-
-        broadcast(new NewOrderSubmitted($order))->toOthers();
-        return response()->json(['message' => 'Rendelés sikeresen leadva', 'order' => new OrderResource($order)], 201);
+        // Ez átkerült a payment controllerbe, mivel ott van a checkout folyamat, és ott van értelme létrehozni a rendelést
     }
 
     /**

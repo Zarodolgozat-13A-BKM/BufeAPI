@@ -11,7 +11,8 @@ class Order extends Model
         'order_identifier_number',
         'status_id',
         'delivery_date',
-        'payment_intent_id'
+        'payment_intent_id',
+        'comment'
     ];
 
     public function status()

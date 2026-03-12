@@ -22,7 +22,8 @@ class OrderResource extends JsonResource
             'delivery_date' => $this->delivery_date,
             'items' => OrderItemResource::collection($this->items),
             'total_price' => $this->items->sum(fn($item) => $item->pivot->quantity * $item->price),
-            'default_completion_time' => $this->items->sum(fn($item) => $item->default_time_to_deliver)
+            'default_completion_time' => $this->items->sum(fn($item) => $item->default_time_to_deliver),
+            'comment' => $this->comment
         ];
     }
 }

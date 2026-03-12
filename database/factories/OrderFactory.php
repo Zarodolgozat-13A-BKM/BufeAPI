@@ -23,6 +23,7 @@ class OrderFactory extends Factory
             'user_id' => User::inRandomOrder()->first()->id,
             'status_id' => Status::inRandomOrder()->first()->id,
             'delivery_date' => fake()->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
+            'comment' => fake()->sentence()
         ];
     }
 }
