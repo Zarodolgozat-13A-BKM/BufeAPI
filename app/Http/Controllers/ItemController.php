@@ -57,7 +57,7 @@ class ItemController extends Controller
         }
         $data = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'picture_url' => 'sometimes|nullable|url',
+            'image' => 'sometimes|nullable|file',
             'description' => 'sometimes|nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
             'is_active' => 'sometimes|required|boolean',
@@ -93,6 +93,16 @@ class ItemController extends Controller
             return response()->json(['message' => 'Nincs ilyen termék'], 404);
         }
         $item->toggleActive();
-        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => $item], 200);
+        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
+    }
+
+    public function toggleItemFeaturedStatus(Request $request, $id)
+    {
+        $item = Item::find($id);
+        if (!$item) {
+            return response()->json(['message' => 'Nincs ilyen termék'], 404);
+        }
+        $item->toggleFeatured();
+        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
     }
 }

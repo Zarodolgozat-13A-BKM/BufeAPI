@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StatusResource;
 use App\Models\Status;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class StatusController extends Controller
      */
     public function index()
     {
-        return Status::all();
+        return response()->json(StatusResource::collection(Status::all()));
     }
 
     /**
@@ -30,15 +31,16 @@ class StatusController extends Controller
 
         $status = Status::create($validatedData);
 
-        return response()->json($status, 201);
+        return response()->json(StatusResource::make($status), 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Status $status)
+    public function show(string $id)
     {
-        return $status;
+        $status = Status::findOrFail($id);
+        return response()->json(StatusResource::make($status));
     }
 
     /**
@@ -52,7 +54,7 @@ class StatusController extends Controller
 
         $status->update($validatedData);
 
-        return response()->json($status, 200);
+        return response()->json(StatusResource::make($status), 200);
     }
 
     /**

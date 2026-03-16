@@ -30,7 +30,7 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::create($data);
-        return response()->json(['message' => 'Kategória sikeresen létrehozva', 'category' => $category], 201);
+        return response()->json(['message' => 'Kategória sikeresen létrehozva', 'category' => CategoryResource::make($category)], 201);
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryController extends Controller
         if (!$category) {
             return response()->json(['message' => 'Nincs ilyen kategória'], 404);
         }
-        return response()->json($category, 200);
+        return response()->json(CategoryResource::make($category), 200);
     }
 
     /**
@@ -60,7 +60,7 @@ class CategoryController extends Controller
         ]);
 
         $category->update($data);
-        return response()->json(['message' => 'Kategória sikeresen frissítve', 'category' => $category], 200);
+        return response()->json(['message' => 'Kategória sikeresen frissítve', 'category' => CategoryResource::make($category)], 200);
     }
 
     /**

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bufeapi-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+  # volumeName: mariadb-test-pv
+  #CSAK itt a Jedlikben
+  selector:
+    matchLabels:
+      student: marko-milan

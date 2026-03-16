@@ -17,7 +17,7 @@ class StatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement(['beérkezett', 'feldolgozás alatt', 'teljesítve', 'kész', 'lemondva']),
+            'name' => fake()->unique()->randomElement(['Fizetésre vár', 'Fizetve', 'Készítjük', 'Átvehető', 'Átadva', 'Törölve']),
         ];
     }
 }

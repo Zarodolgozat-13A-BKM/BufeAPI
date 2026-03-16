@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrderSubmitted;
+use App\Events\OrderStateChanged;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Status;
+use App\Services\JedlikCsengoService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,37 +31,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'delivery_date' => 'nullable|date',
-            'items' => 'required|array',
-            'items.*.item_id' => 'required|exists:items,id',
-            'items.*.quantity' => 'required|integer|min:1',
-        ]);
-
-        $user = $request->user();
-
-        $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
-        $number = 1;
-        if ($lastNumber != 100) {
-            $number = $lastNumber + 1;
-        }
-
-        $order = Order::create([
-            'user_id' => $user->id,
-            'order_identifier_number' => $number,
-            'status_id' => Status::where('name', 'beérkezett')->first()->id,
-            'delivery_date' => $data['delivery_date'] ?? null,
-        ]);
-
-        foreach ($data['items'] as $itemData) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $itemData['item_id'],
-                'quantity' => $itemData['quantity'],
-            ]);
-        }
-
-        return response()->json(['message' => 'Rendelés sikeresen leadva', 'order' => $order, 'completion_time' => $order->completionTime()], 201);
+        // Ez átkerült a payment controllerbe, mivel ott van a checkout folyamat, és ott van értelme létrehozni a rendelést
     }
 
     /**
@@ -71,7 +44,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Rendelés nem található'], 404);
         }
         $order->load('items');
-        return response()->json($order, 200);
+        return response()->json(new OrderResource($order), 200);
     }
 
     /**
@@ -79,7 +52,19 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $order = Order::all()->find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Rendelés nem található'], 404);
+        }
+
+        $data = $request->validate([
+            'status_id' => 'sometimes|exists:statuses,id',
+            'delivery_date' => 'sometimes|date',
+        ]);
+
+        $order->update($data);
+        broadcast(new OrderStateChanged($order));
+        return response()->json(['message' => 'Rendelés sikeresen frissítve', 'order' => new OrderResource($order)], 200);
     }
 
     /**
@@ -93,5 +78,11 @@ class OrderController extends Controller
         }
         $order->delete();
         return response()->json(['message' => 'Rendelés sikeresen törölve'], 200);
+    }
+
+    public function getBreaks($date = null)
+    {
+        $jedlikCsengoService = new JedlikCsengoService();
+        return response()->json(['date' => $date ?? date('Y-m-d'), 'breaks' => $jedlikCsengoService->getRingTableForDate($date ?? date('Y-m-d'))], 200);
     }
 }

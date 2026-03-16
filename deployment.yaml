@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: bufeapi-laravelapp-config
 data:
-  APP_URL: "http://bufeapi.jcloud.jedlik.cloud"
+  APP_URL: "https://bufeapi.jcloud.jedlik.cloud"
   APP_NAME: "BufeAPI"
   APP_ENV: "production"
   APP_DEBUG: "false"
@@ -28,8 +28,12 @@ data:
   SESSION_ENCRYPT: "false"
   SESSION_PATH: "/"
   SESSION_DOMAIN: "null"
-  FRONTEND_URL: "http://bufe.jcloud.jedlik.cloud"
-
+  FRONTEND_URL: "https://bufe.jcloud.jedlik.cloud"
+  BROADCAST_DRIVER: "redis"
+  REDIS_CLIENT: "phpredis"
+  REDIS_HOST: "https://bufeapi.jcloud.jedlik.cloud"
+  REDIS_PASSWORD: "null"
+  REDIS_PORT: "6379"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +48,7 @@ spec:
       labels:
         app: bufe-api
     spec:
+      restartPolicy: Always
       imagePullSecrets:
         - name: ghcr-login-secret
       containers:
@@ -63,6 +68,15 @@ spec:
                 name: bufeapi-prod-secret
             - secretRef:
                 name: bufeapi-reverb-secret
+            - secretRef:
+                name: bufe-api-stripe-secret
+          volumeMounts:
+            - name: bufeapi-storage
+              mountPath: /var/www/html/storage/app/public
+      volumes:
+        - name: bufeapi-storage
+          persistentVolumeClaim:
+            claimName: bufeapi-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -92,7 +106,7 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - bufeapi-markomilan.jcloud.jedlik.cloud
+    - bufeapi.jcloud.jedlik.cloud
     - bufeapi-ws.jcloud.jedlik.cloud
 
 ---
@@ -104,6 +118,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-websocket: "true"
 spec:
   ingressClassName: nginx
   tls:

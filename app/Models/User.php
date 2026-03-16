@@ -33,10 +33,15 @@ class User extends Authenticatable implements LdapAuthenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function assignRole($role)
+    public function assignRole($role): void
     {
         $this->role = $role;
         $this->save();
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
     /**

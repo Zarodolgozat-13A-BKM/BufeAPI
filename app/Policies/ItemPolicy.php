@@ -16,7 +16,7 @@ class ItemPolicy
     {
         return $user->role === 'admin';
     }
-    public function update(User $user, Item $item): bool
+    public function update(User $user): bool
     {
         return $user->role === 'admin';
     }
@@ -24,8 +24,8 @@ class ItemPolicy
     {
         return $user->role === 'admin';
     }
-    public function toggleItemActiveStatus(User $user, Item $item): bool
-    {
-        return $user->role === 'admin';
-    }
+    // public function toggleItemActiveStatus(User $user, Item $item): bool
+    // {
+    //     return $user->role === 'admin';
+    // }
 }

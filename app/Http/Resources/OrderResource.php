@@ -17,12 +17,13 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_identifier_number' => $this->order_identifier_number,
-            'user_id' => $this->user_id,
+            'user_username' => $this->user->username,
             'status' => $this->status->name,
             'delivery_date' => $this->delivery_date,
             'items' => OrderItemResource::collection($this->items),
             'total_price' => $this->items->sum(fn($item) => $item->pivot->quantity * $item->price),
-            'default_completion_time' => $this->items->sum(fn($item) => $item->default_time_to_deliver)
+            'default_completion_time' => $this->items->sum(fn($item) => $item->default_time_to_deliver),
+            'comment' => $this->comment
         ];
     }
 }
