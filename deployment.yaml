@@ -70,13 +70,13 @@ spec:
                 name: bufeapi-reverb-secret
             - secretRef:
                 name: bufe-api-stripe-secret
-      #     volumeMounts:
-      #       - name: bufeapi-storage
-      #         mountPath: /var/www/html/storage/app/public
-      # volumes:
-      #   - name: bufeapi-storage
-      #     persistentVolumeClaim:
-      #       claimName: bufeapi-pvc
+          volumeMounts:
+            - name: bufeapi-storage
+              mountPath: /var/www/html/storage/app/public
+      volumes:
+        - name: bufeapi-storage
+          persistentVolumeClaim:
+            claimName: bufeapi-pvc
 ---
 apiVersion: v1
 kind: Service

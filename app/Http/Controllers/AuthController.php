@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
@@ -43,5 +44,10 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json(["full_name" => $request->user()->full_name, "email" => $request->user()->email, "role" => $request->user()->role]);
+    }
+
+    public function details(Request $request)
+    {
+        return response()->json(UserResource::make($request->user()));
     }
 }

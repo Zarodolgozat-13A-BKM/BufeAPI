@@ -93,6 +93,16 @@ class ItemController extends Controller
             return response()->json(['message' => 'Nincs ilyen termék'], 404);
         }
         $item->toggleActive();
-        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => $item], 200);
+        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
+    }
+
+    public function toggleItemFeaturedStatus(Request $request, $id)
+    {
+        $item = Item::find($id);
+        if (!$item) {
+            return response()->json(['message' => 'Nincs ilyen termék'], 404);
+        }
+        $item->toggleFeatured();
+        return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
     }
 }
