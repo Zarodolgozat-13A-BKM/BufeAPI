@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Status;
+use App\Services\JedlikCsengoService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 
@@ -77,5 +78,11 @@ class OrderController extends Controller
         }
         $order->delete();
         return response()->json(['message' => 'Rendelés sikeresen törölve'], 200);
+    }
+
+    public function getBreaks(string $date)
+    {
+        $jedlikCsengoService = new JedlikCsengoService();
+        return response()->json($jedlikCsengoService->getRingTableForDate($date ?? date('Y-m-d')), 200);
     }
 }
