@@ -54,6 +54,7 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'order_identifier_number' => $number,
             'status_id' => Status::where('name', 'Fizetésre vár')->first()->id,
+            'comment' => $data['comment'] ?? null,
             'delivery_date' => $data['delivery_date'] ?? null,
             'payment_intent_id' => $intent->id
         ]);

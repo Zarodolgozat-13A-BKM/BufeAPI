@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->string('picture_url')->default('itemImages/placeholder.jpg');
+            $table->string('picture_url')->default('placeholder.jpg');
             $table->text('description')->nullable();
             $table->integer('price');
             $table->boolean('is_active')->default(true);

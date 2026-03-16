@@ -50,4 +50,9 @@ class AuthController extends Controller
     {
         return response()->json(UserResource::make($request->user()));
     }
+
+    public function isTokenStillValid(Request $request)
+    {
+        return response()->json(['valid' => $request->user() !== null]);
+    }
 }

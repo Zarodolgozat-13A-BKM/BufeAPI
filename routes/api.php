@@ -18,6 +18,7 @@ Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::get('me', 'me')->middleware('auth:sanctum');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
     Route::get('details', 'details')->middleware('auth:sanctum');
+    Route::post('is-token-still-valid', 'isTokenStillValid');
 });
 Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
     Route::get('/', 'index');
