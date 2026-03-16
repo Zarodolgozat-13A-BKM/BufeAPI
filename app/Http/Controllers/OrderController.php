@@ -80,9 +80,9 @@ class OrderController extends Controller
         return response()->json(['message' => 'Rendelés sikeresen törölve'], 200);
     }
 
-    public function getBreaks(string $date)
+    public function getBreaks($date = null)
     {
         $jedlikCsengoService = new JedlikCsengoService();
-        return response()->json($jedlikCsengoService->getRingTableForDate($date ?? date('Y-m-d')), 200);
+        return response()->json(['date' => $date ?? date('Y-m-d'), 'breaks' => $jedlikCsengoService->getRingTableForDate($date ?? date('Y-m-d'))], 200);
     }
 }

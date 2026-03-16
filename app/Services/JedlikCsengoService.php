@@ -23,7 +23,7 @@ class JedlikCsengoService
         if (!$date) {
             $date = date('Y-m-d');
         }
-        $resp = $this->client()->get('/' . $date);
+        $resp = $this->client()->get($date);
         $breaks = [];
         if ($resp->successful()) {
             $data = $resp->json();
