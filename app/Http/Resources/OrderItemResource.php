@@ -19,7 +19,7 @@ class OrderItemResource extends JsonResource
             'item_id' => $this->id,
             'item_name' => $this->name,
             'item_price' => $this->price,
-            'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "placeholder.jpg",
+            'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "/placeholder.jpg",
             'quantity' => $this->pivot->quantity,
             'price' => $this->pivot->quantity * $this->price
         ];
