@@ -16,11 +16,11 @@ class ItemPolicy
     {
         return $user->role === 'admin';
     }
-    public function update(User $user): bool
+    public function update(User $user, Item $item): bool
     {
         return $user->role === 'admin';
     }
-    public function delete(User $user): bool
+    public function delete(User $user, Item $item): bool
     {
         return $user->role === 'admin';
     }
