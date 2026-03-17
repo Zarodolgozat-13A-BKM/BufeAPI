@@ -9,19 +9,19 @@ class CategoryPolicy
 {
     public function view(User $user, Category $category): bool
     {
-        return $category->items()->count() > 0 || $user->role === 'admin';
+        return $category->items()->count() > 0 || $user->isAdmin();
     }
     public function create(User $user): bool
     {
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
     public function update(User $user, Category $category): bool
     {
 
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
     public function delete(User $user, Category $category): bool
     {
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
 }

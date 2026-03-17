@@ -39,8 +39,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $orderFiltered = $order->load('items')->where(fn($item) => Gate::allows('view', $item));
-        return response()->json(new OrderResource($orderFiltered), 200);
+        return response()->json(new OrderResource($order), 200);
     }
 
     /**
