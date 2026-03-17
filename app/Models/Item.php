@@ -24,6 +24,11 @@ class Item extends Model
         $this->is_active = !$this->is_active;
         $this->save();
     }
+    public function toggleFeatured()
+    {
+        $this->is_featured = !$this->is_featured;
+        $this->save();
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);

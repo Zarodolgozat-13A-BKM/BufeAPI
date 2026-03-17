@@ -10,18 +10,18 @@ class ItemPolicy
 {
     public function view(User $user, Item $item): bool
     {
-        return $item->is_active || $user->role === 'admin';
+        return $item->is_active || $user->isAdmin();
     }
     public function create(User $user): bool
     {
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
     public function update(User $user, Item $item): bool
     {
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
     public function delete(User $user, Item $item): bool
     {
-        return $user->role === 'admin';
+        return $user->isAdmin();
     }
 }

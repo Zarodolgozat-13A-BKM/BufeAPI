@@ -11,6 +11,6 @@ class StatusPolicy
 
     public function before(User $user)
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 }
