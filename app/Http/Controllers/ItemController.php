@@ -36,7 +36,7 @@ class ItemController extends Controller
             'category_id' => 'required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
         ]);
-        $url = null;
+        $url = "placeholder.jpg";
         if ($request->hasFile('image')) {
             $url = $request->file('image')->store('itemImages', 'public');
         }
