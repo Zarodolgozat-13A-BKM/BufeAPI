@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
     Route::get('/{item}', 'show');
     Route::post('/', 'create')->can('create', Item::class);
     Route::patch('/{item}', 'update')->can('update', 'item');
-    Route::delete('/{item}', 'delete')->can('delete', 'item');
+    Route::delete('/{item}', 'destroy')->can('delete', 'item');
     Route::post('/{item}/toggle-active', 'toggleItemActiveStatus')->can('update', 'item');
     Route::post('/{item}/toggle-featured', 'toggleItemFeaturedStatus')->can('update', 'item');
 });
@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryCont
     Route::post('/', 'store')->can('create', Category::class);
     Route::get('/{category}', 'show')->can('view', 'category');
     Route::patch('/{category}', 'update')->can('update', 'category');
-    Route::delete('/{category}', 'delete')->can('delete', 'category');
+    Route::delete('/{category}', 'destroy')->can('delete', 'category');
 });
 
 Route::middleware('auth:sanctum')->prefix('payment')->controller((PaymentController::class))->group(function () {
@@ -55,5 +55,5 @@ Route::middleware('auth:sanctum')->prefix('statuses')->controller(StatusControll
     Route::get('/', 'index');
     Route::post('/', 'store')->can('create', Status::class);
     Route::get('/{status}', 'show')->can('view', 'status');
-    Route::delete('/{status}', 'delete')->can('delete', 'status');
+    Route::delete('/{status}', 'destroy')->can('delete', 'status');
 });

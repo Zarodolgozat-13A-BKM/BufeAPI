@@ -65,7 +65,7 @@ class ItemController extends Controller
         $item->update($data);
         return response()->json(new ItemResource($item), 200);
     }
-    public function delete(Request $request, Item $item)
+    public function destroy(Request $request, Item $item)
     {
         if (Storage::disk('public')->exists($item->picture_url)) {
             Storage::disk('public')->delete($item->picture_url);
