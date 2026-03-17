@@ -22,28 +22,28 @@ Route::prefix('account')->controller(AuthController::class)->group(function () {
 });
 Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
     Route::get('/', 'index');
-    Route::get('/{id}', 'show');
+    Route::get('/{item}', 'show');
     Route::post('/', 'create')->can('create', Item::class);
-    Route::patch('/{id}', 'update')->can('update', Item::class);
-    Route::delete('/{id}', 'delete')->can('delete', Item::class);
-    Route::post('/{id}/toggle-active', 'toggleItemActiveStatus')->can('update', Item::class);
-    Route::post('/{id}/toggle-featured', 'toggleItemFeaturedStatus')->can('update', Item::class);
+    Route::patch('/{item}', 'update')->can('update', 'item');
+    Route::delete('/{item}', 'delete')->can('delete', 'item');
+    Route::post('/{item}/toggle-active', 'toggleItemActiveStatus')->can('update', 'item');
+    Route::post('/{item}/toggle-featured', 'toggleItemFeaturedStatus')->can('update', 'item');
 });
 
 Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'index');
     // Route::post('/', 'store')->can('create', Order::class);
     Route::get('/breaks/{date?}', 'getBreaks');
-    Route::patch('/{id}', 'update');
-    Route::get('/{id}', 'show')->can('view', Order::class);
+    Route::patch('/{order}', 'update')->can('update', 'order');
+    Route::get('/{order}', 'show')->can('view', 'order');
 });
 
 Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/', 'store')->can('create', Category::class);
-    Route::get('/{id}', 'show');
-    Route::patch('/{id}', 'update')->can('update', Category::class);
-    Route::delete('/{id}', 'delete')->can('delete', Category::class);
+    Route::get('/{category}', 'show')->can('view', 'category');
+    Route::patch('/{category}', 'update')->can('update', 'category');
+    Route::delete('/{category}', 'delete')->can('delete', 'category');
 });
 
 Route::middleware('auth:sanctum')->prefix('payment')->controller((PaymentController::class))->group(function () {
@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->prefix('payment')->controller((PaymentControl
 
 Route::middleware('auth:sanctum')->prefix('statuses')->controller(StatusController::class)->group(function () {
     Route::get('/', 'index');
-    Route::post('/', 'store');
-    Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'delete')->can('delete', Status::class);
+    Route::post('/', 'store')->can('create', Status::class);
+    Route::get('/{status}', 'show')->can('view', 'status');
+    Route::delete('/{status}', 'delete')->can('delete', 'status');
 });

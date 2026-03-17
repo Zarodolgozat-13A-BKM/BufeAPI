@@ -5,8 +5,8 @@ metadata:
 data:
   APP_URL: "https://bufeapi.jcloud.jedlik.cloud"
   APP_NAME: "BufeAPI"
-  APP_ENV: "production"
-  APP_DEBUG: "false"
+  APP_ENV: "local"
+  APP_DEBUG: "true"
   DB_CONNECTION: "mysql"
   DB_USERNAME: "marko.milan"
   DB_HOST: "jcloud02.jedlik.eu"

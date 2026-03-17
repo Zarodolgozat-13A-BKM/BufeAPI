@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Policies\CategoryPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
-#[UsePolicy(CategoryPolicy::class)]
 class CategoryController extends Controller
 {
     /**
@@ -36,24 +35,16 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        $category = Category::with('items')->find($id);
-        if (!$category) {
-            return response()->json(['message' => 'Nincs ilyen kategória'], 404);
-        }
         return response()->json(CategoryResource::make($category), 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::with('items')->find($id);
-        if (!$category) {
-            return response()->json(['message' => 'Nincs ilyen kategória'], 404);
-        }
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -66,13 +57,8 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        $category = Category::with('items')->find($id);
-        if (!$category) {
-            return response()->json(['message' => 'Nincs ilyen kategória'], 404);
-        }
-
         $category->delete();
         return response()->json(['message' => 'Kategória sikeresen törölve'], 200);
     }
