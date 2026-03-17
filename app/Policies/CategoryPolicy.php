@@ -9,7 +9,7 @@ class CategoryPolicy
 {
     public function view(User $user, Category $category): bool
     {
-        return $category->is_active || $user->role === 'admin';
+        return $category->items()->count() > 0 || $user->role === 'admin';
     }
     public function create(User $user): bool
     {

@@ -24,8 +24,4 @@ class ItemPolicy
     {
         return $user->role === 'admin';
     }
-    // public function toggleItemActiveStatus(User $user, Item $item): bool
-    // {
-    //     return $user->role === 'admin';
-    // }
 }

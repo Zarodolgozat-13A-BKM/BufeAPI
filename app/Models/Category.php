@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Policies\CategoryPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
-#[UsePolicy(CategoryPolicy::class)]
 class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */

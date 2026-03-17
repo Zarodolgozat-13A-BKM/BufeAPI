@@ -11,7 +11,6 @@ use App\Policies\ItemPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Support\Facades\Storage;
 
-#[UsePolicy(ItemPolicy::class)]
 class ItemController extends Controller
 {
     //
@@ -21,12 +20,8 @@ class ItemController extends Controller
             'items' => Item::all()->where(fn($item) => Gate::allows('view', $item))
         ], 200);
     }
-    public function show(Request $request, $id, User $user)
+    public function show(Request $request, Item $item, User $user)
     {
-        $item = Item::find($id);
-        if (!$item) {
-            return response()->json(['message' => 'Nincs ilyen termék'], 404);
-        }
         return response()->json(['item' => $item], 200);
     }
     public function create(Request $request)
@@ -49,12 +44,8 @@ class ItemController extends Controller
         $item = Item::create($data);
         return response()->json(new ItemResource($item), 201);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Item $item)
     {
-        $item = Item::find($id);
-        if (!$item) {
-            return response()->json(['message' => 'Nincs ilyen termék'], 404);
-        }
         $data = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'image' => 'sometimes|nullable|file',
@@ -74,34 +65,22 @@ class ItemController extends Controller
         $item->update($data);
         return response()->json(new ItemResource($item), 200);
     }
-    public function delete(Request $request, $id)
+    public function delete(Request $request, Item $item)
     {
-        $item = Item::find($id);
-        if (!$item) {
-            return response()->json(['message' => 'Nincs ilyen termék'], 404);
-        }
         if (Storage::disk('public')->exists($item->picture_url)) {
             Storage::disk('public')->delete($item->picture_url);
         }
         $item->delete();
         return response()->json(['message' => 'Termék sikeresen törölve'], 200);
     }
-    public function toggleItemActiveStatus(Request $request, $id)
+    public function toggleItemActiveStatus(Request $request, Item $item)
     {
-        $item = Item::find($id);
-        if (!$item) {
-            return response()->json(['message' => 'Nincs ilyen termék'], 404);
-        }
         $item->toggleActive();
         return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
     }
 
-    public function toggleItemFeaturedStatus(Request $request, $id)
+    public function toggleItemFeaturedStatus(Request $request, Item $item)
     {
-        $item = Item::find($id);
-        if (!$item) {
-            return response()->json(['message' => 'Nincs ilyen termék'], 404);
-        }
         $item->toggleFeatured();
         return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
     }

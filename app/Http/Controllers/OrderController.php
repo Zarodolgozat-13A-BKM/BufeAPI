@@ -37,25 +37,17 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        $order = Order::all()->find($id);
-        if (!$order) {
-            return response()->json(['message' => 'Rendelés nem található'], 404);
-        }
-        $order->load('items');
-        return response()->json(new OrderResource($order), 200);
+        $orderFiltered = $order->load('items')->where(fn($item) => Gate::allows('view', $item));
+        return response()->json(new OrderResource($orderFiltered), 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Order $order)
     {
-        $order = Order::all()->find($id);
-        if (!$order) {
-            return response()->json(['message' => 'Rendelés nem található'], 404);
-        }
 
         $data = $request->validate([
             'status_id' => 'sometimes|exists:statuses,id',
@@ -70,12 +62,8 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Order $order)
     {
-        $order = Order::all()->find($id);
-        if (!$order) {
-            return response()->json(['message' => 'Rendelés nem található'], 404);
-        }
         $order->delete();
         return response()->json(['message' => 'Rendelés sikeresen törölve'], 200);
     }

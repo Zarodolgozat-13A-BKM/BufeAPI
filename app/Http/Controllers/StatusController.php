@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Http\Request;
 use App\Policies\StatusPolicy;
 
-#[UsePolicy(StatusPolicy::class)]
 class StatusController extends Controller
 {
 
@@ -37,9 +36,8 @@ class StatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Status $status)
     {
-        $status = Status::findOrFail($id);
         return response()->json(StatusResource::make($status));
     }
 

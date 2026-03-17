@@ -24,8 +24,8 @@ COPY . .
 
 # COPY .env.example .env
 
-# Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Install Laravel dependencies NO DEV KELL MAJD VISSZA
+RUN composer install --optimize-autoloader
 # RUN php artisan key:generate
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
