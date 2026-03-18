@@ -7,10 +7,8 @@ use App\Events\OrderStateChanged;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Status;
 use App\Services\JedlikCsengoService;
-use Illuminate\Support\Arr;
+use App\Services\ReceiptManagementService;
 use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
