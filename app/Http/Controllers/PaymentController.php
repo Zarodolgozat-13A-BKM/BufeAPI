@@ -6,12 +6,14 @@ use App\Events\NewOrderSubmitted;
 use App\Events\OrderStateChanged;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Mail\ReceiptMail;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Services\StripeService;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Webhook;
 
 class PaymentController extends Controller
@@ -31,7 +33,7 @@ class PaymentController extends Controller
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'comment' => 'sometimes|string|max:255'
+            'comment' => 'nullable|string|max:255'
         ]);
 
         $user = $request->user();
@@ -42,6 +44,7 @@ class PaymentController extends Controller
         if ($amount <= 200) {
             $amount = 200;
         }
+        $amount *= 100;
         $intent = $this->stripe->createPaymentIntent($amount);
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
@@ -66,6 +69,7 @@ class PaymentController extends Controller
                 'quantity' => $itemData['quantity'],
             ]);
         }
+        Mail::to($user->email)->send(new ReceiptMail($order));
 
         // broadcast(new NewOrderSubmitted($order))->toOthers();
 
