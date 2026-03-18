@@ -18,4 +18,13 @@ class Category extends Model
     {
         return $this->hasMany(Item::class);
     }
+    // public function scopeVisibleTo($query, $user)
+    // {
+    //     if ($user->is_admin) {
+    //         return $query;
+    //     }
+    //     return $query->where(function ($q) use ($user) {
+    //         $q->where('user_id', $user->id);
+    //     });
+    // }
 }
