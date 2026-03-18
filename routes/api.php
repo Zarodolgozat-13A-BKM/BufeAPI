@@ -46,8 +46,8 @@ Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryCont
     Route::delete('/{category}', 'destroy')->can('delete', 'category');
 });
 
-Route::middleware('auth:sanctum')->prefix('payment')->controller((PaymentController::class))->group(function () {
-    Route::post('/checkout', 'checkout');
+Route::prefix('payment')->controller((PaymentController::class))->group(function () {
+    Route::post('/checkout', 'checkout')->middleware('auth:sanctum');
     Route::post('/webhook', 'handle');
 });
 

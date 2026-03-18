@@ -34,6 +34,7 @@ data:
   REDIS_HOST: "https://bufeapi.jcloud.jedlik.cloud"
   REDIS_PASSWORD: "null"
   REDIS_PORT: "6379"
+  JCS_URL: "https://jedlikinfo.jedlik.eu/api/api/timetable/ringsystem/"
 ---
 apiVersion: apps/v1
 kind: Deployment
