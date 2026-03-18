@@ -61,7 +61,8 @@ class ItemController extends Controller
             $url = $request->file('image')->store('itemImages', 'public');
         }
         $data['picture_url'] = $url;
-        $item = Item::create($data);
+        // $item = Item::create($data);
+        // $item->update($data);
         $item->update($data);
         return response()->json(new ItemResource($item), 200);
     }
