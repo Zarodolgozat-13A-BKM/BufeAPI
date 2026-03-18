@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ReceiptManagementService;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
