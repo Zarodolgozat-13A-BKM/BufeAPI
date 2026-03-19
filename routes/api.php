@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
 Route::middleware('auth:sanctum')->prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'index');
     // Route::post('/', 'store')->can('create', Order::class);
+    Route::get('/active', 'getActiveOrders');
     Route::get('/breaks/{date?}', 'getBreaks');
     Route::patch('/{order}', 'update')->can('update', 'order');
     Route::get('/{order}', 'show')->can('view', 'order');
