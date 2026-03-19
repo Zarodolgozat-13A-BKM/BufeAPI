@@ -14,10 +14,18 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $request->user();
+        if ($user->isAdmin()) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'items' => ItemResource::collection($this->items)
+            ];
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'items' => ItemResource::collection($this->items)
+            'items' => ItemResource::collection($this->items()->where('is_active', true)->get())
         ];
     }
 }
