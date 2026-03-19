@@ -7,6 +7,7 @@ use App\Events\OrderStateChanged;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Status;
 use App\Services\JedlikCsengoService;
 use App\Services\ReceiptManagementService;
 use Illuminate\Support\Facades\Gate;
@@ -20,6 +21,14 @@ class OrderController extends Controller
     {
         return response()->json(
             OrderResource::collection(Order::all()->where(fn($item) => Gate::allows('view', $item))),
+            200
+        );
+    }
+
+    public function getActiveOrders()
+    {
+        return response()->json(
+            OrderResource::collection(Order::whereIn('status_id', [Status::where('name', 'Fizetésre vár')->first()->id, Status::where('name', 'Fizetve')->first()->id])->get()->where(fn($item) => Gate::allows('view', $item))),
             200
         );
     }

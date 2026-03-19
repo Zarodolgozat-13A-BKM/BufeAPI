@@ -33,7 +33,6 @@ class NewOrderSubmitted implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('order.' . $this->order->id),
             new PrivateChannel('orders_admin')
         ];
     }

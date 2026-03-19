@@ -71,7 +71,7 @@ class PaymentController extends Controller
         }
         Mail::to($user->email)->send(new ReceiptMail($order));
 
-        // broadcast(new NewOrderSubmitted($order))->toOthers();
+        broadcast(new NewOrderSubmitted($order));
 
         return response()->json([
             'client_secret' => $intent->client_secret,

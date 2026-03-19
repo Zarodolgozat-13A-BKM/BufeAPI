@@ -34,7 +34,7 @@ class OrderStateChanged implements ShouldBroadcastNow
     {
         return [
             new PrivateChannel('order.' . $this->order->id),
-            new PrivateChannel('orders_admin')
+            // new PrivateChannel('orders_admin')
         ];
     }
     public function broadcastAs()
