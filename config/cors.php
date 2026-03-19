@@ -15,20 +15,20 @@ return [
     |
     */
 
-'paths' => ['api/*', 'broadcasting/auth', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'broadcasting/auth', 'sanctum/csrf-cookie'],
 
-'allowed_methods' => ['*'],
+    'allowed_methods' => ['*'],
 
-'allowed_origins' => ['http://localhost:5173'], // Add your Vite URL here
+    'allowed_origins' => ['https://bufe.jcloud.jedlik.cloud'], // Add your Vite URL here
 
-'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [],
 
-'allowed_headers' => ['*'],
+    'allowed_headers' => ['*'],
 
-'exposed_headers' => [],
+    'exposed_headers' => [],
 
-'max_age' => 0,
+    'max_age' => 0,
 
-'supports_credentials' => true, // Set this to true for auth/cookies
+    'supports_credentials' => true, // Set this to true for auth/cookies
 
 ];
