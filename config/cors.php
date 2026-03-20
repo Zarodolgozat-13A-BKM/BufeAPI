@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://bufe.jcloud.jedlik.cloud'], // Add your Vite URL here
+    'allowed_origins' => ['*'], // Add your Vite URL here
 
     'allowed_origins_patterns' => [],
 
