@@ -72,6 +72,7 @@ class PaymentController extends Controller
         Mail::to($user->email)->send(new ReceiptMail($order));
 
         broadcast(new NewOrderSubmitted($order));
+        error_log("New order submitted: " . $order->id);
 
         return response()->json([
             'client_secret' => $intent->client_secret,
