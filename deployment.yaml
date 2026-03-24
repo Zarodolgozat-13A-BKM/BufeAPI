@@ -35,6 +35,13 @@ data:
   REDIS_PASSWORD: "null"
   REDIS_PORT: "6379"
   JCS_URL: "https://jedlikinfo.jedlik.eu/api/api/timetable/ringsystem/"
+  MAIL_MAILER: "smtp"
+  MAIL_HOST: "smtp.gmail.com"
+  MAIL_PORT: "587"
+  MAIL_USERNAME: "jedlikbufe@gmail.com"
+  MAIL_FROM_ADDRESS: "jedlikbufe@gmail.com"
+  MAIL_FROM_NAME: "JedlikBüfé"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
