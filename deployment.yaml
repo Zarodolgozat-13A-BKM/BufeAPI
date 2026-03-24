@@ -37,6 +37,9 @@ data:
   MAIL_USERNAME: "jedlikbufe@gmail.com"
   MAIL_FROM_ADDRESS: "jedlikbufe@gmail.com"
   MAIL_FROM_NAME: "JedlikBüfé"
+  REVERB_HOST: "https://bufeapi-ws.jcloud.jedlik.cloud"
+  REVERB_PORT: "8080"
+  REVERB_SCHEME: "https"
 
 ---
 apiVersion: apps/v1
