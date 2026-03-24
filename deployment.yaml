@@ -29,7 +29,7 @@ data:
   SESSION_PATH: "/"
   SESSION_DOMAIN: "null"
   FRONTEND_URL: "https://bufe.jcloud.jedlik.cloud"
-  BROADCAST_DRIVER: "redis"
+  BROADCAST_DRIVER: "reverb"
   REDIS_CLIENT: "phpredis"
   REDIS_HOST: "https://bufeapi.jcloud.jedlik.cloud"
   REDIS_PASSWORD: "null"
