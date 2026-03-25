@@ -37,7 +37,7 @@ data:
   MAIL_USERNAME: "jedlikbufe@gmail.com"
   MAIL_FROM_ADDRESS: "jedlikbufe@gmail.com"
   MAIL_FROM_NAME: "JedlikBüfé"
-  REVERB_HOST: "https://bufeapi-ws.jcloud.jedlik.cloud"
+  REVERB_HOST: "bufe-reverb-svc"
   REVERB_PORT: "8080"
   REVERB_SCHEME: "https"
 
@@ -97,11 +97,18 @@ spec:
   type: ClusterIP
   ports:
     - protocol: TCP
-      name: http
       targetPort: 8000
       port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bufe-reverb-svc
+spec: 
+  selector:
+    app: bufe-api
+  ports:
     - protocol: TCP
-      name: websocket
       targetPort: 8080
       port: 8080
 ---
@@ -153,7 +160,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: bufe-api-cluster-ip-service
+                name: bufe-reverb-svc
                 port:
                   number: 8080
 ---
