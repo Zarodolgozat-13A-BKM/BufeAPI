@@ -33,7 +33,7 @@ class PaymentController extends Controller
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'comment' => 'nullable|string|max:255'
+            'comment' => 'sometimes|string|max:255'
         ]);
 
         $user = $request->user();
@@ -71,8 +71,6 @@ class PaymentController extends Controller
         }
         Mail::to($user->email)->send(new ReceiptMail($order));
 
-        broadcast(new NewOrderSubmitted($order));
-        error_log("New order submitted: " . $order->id);
 
         return response()->json([
             'client_secret' => $intent->client_secret,
@@ -98,7 +96,6 @@ class PaymentController extends Controller
                 $paymentIntent = $event->data->object;
                 $order = Order::where('payment_intent_id', $paymentIntent->id)->first();
                 $order->update(['status_id' => Status::where('name', 'Fizetve')->first()->id]);
-                broadcast(new OrderStateChanged($order));
                 break;
 
             case 'payment_intent.payment_failed':
@@ -106,7 +103,6 @@ class PaymentController extends Controller
                 $paymentIntent = $event->data->object;
                 $order = Order::where('payment_intent_id', $paymentIntent->id)->first();
                 $order->update(['status_id' => Status::where('name', 'Törölve')->first()->id]);
-                broadcast(new OrderStateChanged($order));
                 break;
 
             case 'charge.refunded':

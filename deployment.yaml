@@ -29,7 +29,7 @@ data:
   SESSION_PATH: "/"
   SESSION_DOMAIN: "null"
   FRONTEND_URL: "https://bufe.jcloud.jedlik.cloud"
-  BROADCAST_DRIVER: "reverb"
+  BROADCAST_CONNECTION: "reverb"
   JCS_URL: "https://jedlikinfo.jedlik.eu/api/api/timetable/ringsystem/"
   MAIL_MAILER: "smtp"
   MAIL_HOST: "smtp.gmail.com"

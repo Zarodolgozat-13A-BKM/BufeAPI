@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => ['*'], // Add your Vite URL here
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['*'],
 
     'allowed_headers' => ['*'],
 

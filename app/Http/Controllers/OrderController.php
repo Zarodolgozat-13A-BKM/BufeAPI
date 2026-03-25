@@ -61,7 +61,6 @@ class OrderController extends Controller
         ]);
 
         $order->update($data);
-        broadcast(new OrderStateChanged($order));
         return response()->json(['message' => 'Rendelés sikeresen frissítve', 'order' => new OrderResource($order)], 200);
     }
 
@@ -78,5 +77,18 @@ class OrderController extends Controller
     {
         $jedlikCsengoService = new JedlikCsengoService();
         return response()->json(['date' => $date ?? date('Y-m-d'), 'breaks' => $jedlikCsengoService->getRingTableForDate($date ?? date('Y-m-d'))], 200);
+    }
+
+
+    public function orderIsReady(Order $order)
+    {
+        $order->update(['status_id' => Status::where('name', 'Átvehető')->first()->id]);
+        return response()->json(['message' => 'Rendelés státusza Átvehető-re változtatva'], 200);
+    }
+
+    public function orderIsTaken(Order $order)
+    {
+        $order->update(['status_id' => Status::where('name', 'Átadva')->first()->id]);
+        return response()->json(['message' => 'Rendelés státusza Átadva-re változtatva'], 200);
     }
 }
