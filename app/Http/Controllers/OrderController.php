@@ -57,7 +57,7 @@ class OrderController extends Controller
 
         $data = $request->validate([
             'status_id' => 'sometimes|exists:statuses,id',
-            'delivery_date' => 'sometimes|date',
+            'delivery_date' => 'sometimes|datetime|after:datetime:now|before:datetime:now+1 day',
         ]);
 
         $order->update($data);
