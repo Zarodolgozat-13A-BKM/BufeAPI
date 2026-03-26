@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - kube
-      - cors-bypass
   workflow_dispatch:
 
 jobs:
