@@ -24,7 +24,25 @@ class PaymentController extends Controller
     {
         $this->stripe = $stripe;
     }
+    /**
+     * Get the Stripe publishable key for the frontend to use when creating payment intents.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getStripePublishableKey()
+    {
+        return response()->json([
+            'key' => config('services.stripe.key')
+        ]);
+    }
 
+
+    /**
+     * Handle the checkout process for an order, including creating a Stripe payment intent if necessary.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function checkout(Request $request)
     {
 
@@ -33,7 +51,8 @@ class PaymentController extends Controller
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'comment' => 'sometimes|string|max:255'
+            'comment' => 'sometimes|string|max:255',
+            'cash' => 'required|boolean'
         ]);
 
         $user = $request->user();
@@ -45,7 +64,10 @@ class PaymentController extends Controller
             $amount = 200;
         }
         $amount *= 100;
-        $intent = $this->stripe->createPaymentIntent($amount);
+        $intent = null;
+        if (!$request['cash']) {
+            $intent = $this->stripe->createPaymentIntent($amount);
+        }
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
@@ -59,7 +81,7 @@ class PaymentController extends Controller
             'status_id' => Status::where('name', 'Fizetésre vár')->first()->id,
             'comment' => $data['comment'] ?? null,
             'delivery_date' => $data['delivery_date'] ?? null,
-            'payment_intent_id' => $intent->id
+            'payment_intent_id' => $intent->id ?? null
         ]);
 
         foreach ($data['items'] as $itemData) {
@@ -69,14 +91,18 @@ class PaymentController extends Controller
                 'quantity' => $itemData['quantity'],
             ]);
         }
-        Mail::to($user->email)->send(new ReceiptMail($order));
-
 
         return response()->json([
-            'client_secret' => $intent->client_secret,
+            'client_secret' => $intent->client_secret ?? null,
             'order' => OrderResource::make($order)
         ]);
     }
+    /**
+     * Handle incoming Stripe webhook events to update order statuses based on payment outcomes.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function handle(Request $request)
     {
         $payload = $request->getContent();
@@ -96,6 +122,8 @@ class PaymentController extends Controller
                 $paymentIntent = $event->data->object;
                 $order = Order::where('payment_intent_id', $paymentIntent->id)->first();
                 $order->update(['status_id' => Status::where('name', 'Fizetve')->first()->id]);
+                Mail::to($order->user->email)->send(new ReceiptMail($order));
+
                 break;
 
             case 'payment_intent.payment_failed':
