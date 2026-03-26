@@ -31,7 +31,7 @@ class ReceiptMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'A ' . $this->order->id . '. számú vásárlásod nyugtája',
+            subject: 'A JedlikBüfés vásárlásod nyugtája',
         );
     }
 
@@ -42,7 +42,7 @@ class ReceiptMail extends Mailable
     {
         return new Content(
             view: 'emails.receipt',
-            with: ["name" => $this->order->user->full_name]
+            with: ["name" => $this->order->user->full_name, "orderNumber" => $this->order->id]
         );
     }
 

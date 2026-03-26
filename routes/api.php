@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->prefix('categories')->controller(CategoryCont
 
 Route::prefix('payment')->controller((PaymentController::class))->group(function () {
     Route::post('/checkout', 'checkout')->middleware('auth:sanctum');
+    Route::get('/stripe-key', 'getStripePublishableKey')->middleware('auth:sanctum');
     Route::post('/webhook', 'handle');
 });
 
