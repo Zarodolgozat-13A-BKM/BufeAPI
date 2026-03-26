@@ -47,7 +47,7 @@ class PaymentController extends Controller
     {
 
         $data = $request->validate([
-            'delivery_date' => 'nullable|datetime|after:datetime:now|before:datetime:now+1 day',
+            'delivery_date' => 'nullable|datetime|after:datetime:now',
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
