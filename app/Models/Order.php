@@ -64,7 +64,7 @@ class Order extends Model
     public function broadcastWith()
     {
         return [
-            'order' => new OrderResource($this),
+            'order_id' => $this->id,
         ];
     }
 }
