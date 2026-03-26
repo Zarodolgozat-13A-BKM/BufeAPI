@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('order_identifier_number');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('status_id')->constrained('statuses')->onDelete('cascade');
-            $table->date('delivery_date')->nullable()->useCurrent();
+            $table->datetime('delivery_date')->nullable()->useCurrent();
             $table->string('payment_intent_id')->nullable();
             $table->string('comment')->nullable();
         });
