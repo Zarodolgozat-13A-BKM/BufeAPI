@@ -54,7 +54,7 @@ class Order extends Model
      */
     public function broadcastOn()
     {
-        return [new PrivateChannel('orders_admin'), new PrivateChannel('order.' . $this->id)];
+        return [new PrivateChannel('orders_admin'), new PrivateChannel('ordersOfUser.' . $this->user_id)];
     }
     public function broadcastAs()
     {
