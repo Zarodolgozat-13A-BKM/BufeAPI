@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\ItemObserver;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
 use App\Policies\ItemPolicy;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ItemObserver::class)]
 class Item extends Model
 {
     protected $fillable = [

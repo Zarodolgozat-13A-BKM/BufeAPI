@@ -83,7 +83,13 @@ class PaymentController extends Controller
             'delivery_date' => $data['delivery_date'] ?? null,
             'payment_intent_id' => $intent->id ?? null
         ]);
-
+        foreach ($data['items'] as $itemData) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'item_id' => $itemData['item_id'],
+                'quantity' => $itemData['quantity'],
+            ]);
+        }
 
 
         return response()->json([

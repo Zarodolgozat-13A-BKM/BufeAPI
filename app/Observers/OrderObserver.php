@@ -12,14 +12,7 @@ class OrderObserver
      */
     public function created(Order $order): void
     {
-        $orderItems = $order->items()->get();
-        foreach ($orderItems as $itemData) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $itemData['item_id'],
-                'quantity' => $itemData['quantity'],
-            ]);
-        }
+        //
     }
 
     /**
