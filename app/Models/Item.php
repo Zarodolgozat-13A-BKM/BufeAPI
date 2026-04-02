@@ -17,6 +17,7 @@ class Item extends Model
         'default_time_to_deliver',
         'is_featured',
         'category_id',
+        'inventory_count'
     ];
 
     public function toggleActive()

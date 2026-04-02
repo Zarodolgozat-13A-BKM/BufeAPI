@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Http\Resources\OrderResource;
-use App\Services\ReceiptManagementService;
+use App\Observers\OrderObserver;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(OrderObserver::class)]
 class Order extends Model
 {
     use BroadcastsEvents, HasFactory;
@@ -54,7 +55,7 @@ class Order extends Model
      */
     public function broadcastOn()
     {
-        return [new PrivateChannel('orders_admin'), new PrivateChannel('ordersOfUser.' . $this->user_id)];
+        return [new PrivateChannel('orders_admin'), new PrivateChannel('ordersOfUser.' . $this->user()->first()->email)];
     }
     public function broadcastAs()
     {

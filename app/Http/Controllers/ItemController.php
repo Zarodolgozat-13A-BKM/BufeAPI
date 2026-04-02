@@ -35,6 +35,7 @@ class ItemController extends Controller
             'default_time_to_deliver' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
+            'inventory_count' => 'sometimes|integer|min:0',
         ]);
         $url = "placeholder.jpg";
         if ($request->hasFile('image')) {
@@ -55,6 +56,7 @@ class ItemController extends Controller
             'default_time_to_deliver' => 'sometimes|required|integer|min:0',
             'category_id' => 'sometimes|required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
+            'inventory_count' => 'sometimes|integer|min:0',
         ]);
         $url = null;
         if ($request->hasFile('image')) {

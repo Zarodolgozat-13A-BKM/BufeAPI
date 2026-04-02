@@ -84,13 +84,7 @@ class PaymentController extends Controller
             'payment_intent_id' => $intent->id ?? null
         ]);
 
-        foreach ($data['items'] as $itemData) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'item_id' => $itemData['item_id'],
-                'quantity' => $itemData['quantity'],
-            ]);
-        }
+
 
         return response()->json([
             'client_secret' => $intent->client_secret ?? null,
