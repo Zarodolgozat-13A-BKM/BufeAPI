@@ -55,7 +55,7 @@ class Order extends Model
      */
     public function broadcastOn()
     {
-        return [new PrivateChannel('orders_admin'), new PrivateChannel('ordersOfUser.' . $this->user()->first()->email)];
+        return [new PrivateChannel('orders_admin'), new PrivateChannel('ordersOfUser.' . base64_encode($this->user()->first()->email))];
     }
     public function broadcastAs()
     {
