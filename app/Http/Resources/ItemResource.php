@@ -36,6 +36,7 @@ class ItemResource extends JsonResource
                 'price' => $this->price,
                 'default_time_to_deliver' => $this->default_time_to_deliver,
                 'category_id' => $this->category_id,
+                "is_active" => $this->is_active,
                 'is_featured' => $this->is_featured,
                 'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "/placeholder.jpg",
             ];

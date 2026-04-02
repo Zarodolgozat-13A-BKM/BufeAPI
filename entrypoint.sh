@@ -7,5 +7,4 @@ php artisan route:cache
 php artisan view:cache
 php artisan storage:link
 
-php artisan test --stop-on-failure
 php artisan reverb:start --debug & php artisan serve --host=0.0.0.0 --port=8000
