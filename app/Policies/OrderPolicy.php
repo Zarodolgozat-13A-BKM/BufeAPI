@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Order;
+use App\Models\Status;
 use App\Models\User;
 
 class OrderPolicy

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Factories\CategoryFactory;
@@ -13,6 +14,24 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        CategoryFactory::new()->count(10)->create();
+        Category::create([
+            'name' => 'Ételek',
+        ]);
+
+        Category::create([
+            'name' => 'Italok',
+        ]);
+
+        Category::create([
+            'name' => 'Snackek',
+        ]);
+
+        Category::create([
+            'name' => 'Péksütemények',
+        ]);
+
+        Category::create([
+            'name' => 'Édességek',
+        ]);
     }
 }

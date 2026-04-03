@@ -71,7 +71,7 @@ class PaymentController extends Controller
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
-        if ($lastNumber <= 100) {
+        if ($lastNumber < 100) {
             $number = $lastNumber + 1;
         }
 
