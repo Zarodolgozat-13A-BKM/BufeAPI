@@ -23,4 +23,9 @@ class StripeService
             ],
         ]);
     }
+    public function cancelPaymentIntent($paymentIntentId)
+    {
+        $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+        $paymentIntent->cancel();
+    }
 }

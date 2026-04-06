@@ -141,6 +141,12 @@ class PaymentController extends Controller
                 $order->update(['status_id' => Status::where('name', 'Törölve')->first()->id]);
                 break;
 
+            case 'payment_intent.canceled':
+
+                $paymentIntent = $event->data->object;
+                $order = Order::where('payment_intent_id', $paymentIntent->id)->first();
+                $order->update(['status_id' => Status::where('name', 'Törölve')->first()->id]);
+                break;
             case 'charge.refunded':
 
                 $charge = $event->data->object;
@@ -148,6 +154,7 @@ class PaymentController extends Controller
                 break;
 
             default:
+
                 return response()->json(['message' => 'Unhandled event type'], 400);
         }
 
