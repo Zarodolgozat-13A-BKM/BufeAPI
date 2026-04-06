@@ -15,31 +15,17 @@ class ItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($request->user()->isAdmin()) {
-            return [
-                'id' => $this->id,
-                'name' => $this->name,
-                'description' => $this->description,
-                'price' => $this->price,
-                'is_active' => $this->is_active,
-                'default_time_to_deliver' => $this->default_time_to_deliver,
-                'category_id' => $this->category_id,
-                'is_featured' => $this->is_featured,
-                'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "/placeholder.jpg",
-                'inventory_count' => $this->inventory_count
-            ];
-        } else {
-            return [
-                'id' => $this->id,
-                'name' => $this->name,
-                'description' => $this->description,
-                'price' => $this->price,
-                'default_time_to_deliver' => $this->default_time_to_deliver,
-                'category_id' => $this->category_id,
-                "is_active" => $this->is_active,
-                'is_featured' => $this->is_featured,
-                'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "/placeholder.jpg",
-            ];
-        }
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'is_active' => $this->is_active,
+            'default_time_to_deliver' => $this->default_time_to_deliver,
+            'category_id' => $this->category_id,
+            'is_featured' => $this->is_featured,
+            'picture_url' => ($this->picture_url != "placeholder.jpg") ? url('/') . Storage::url($this->picture_url) : url('/') . "/placeholder.jpg",
+            'inventory_count' => $this->inventory_count
+        ];
     }
 }
