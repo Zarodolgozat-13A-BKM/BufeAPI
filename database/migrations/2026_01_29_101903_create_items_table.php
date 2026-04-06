@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('default_time_to_deliver'); // percekben van
             $table->boolean('is_featured')->default(false);
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->integer('inventory_count')->default(0);
+            $table->integer('inventory_count')->default(20);
         });
     }
 
