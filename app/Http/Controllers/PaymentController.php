@@ -56,6 +56,13 @@ class PaymentController extends Controller
         ]);
 
         $user = $request->user();
+        $isThereEnoughInventory = collect($data['items'])->every(function ($item) {
+            $itemModel = Item::find($item['item_id']);
+            return $itemModel->inventory_count >= $item['quantity'];
+        });
+        if (!$isThereEnoughInventory) {
+            return response()->json(['message' => 'Nincs elég egy vagy több termékből.'], 400);
+        }
         $amount = collect($request['items'])->sum(function ($item) {
             $itemModel = Item::find($item['item_id']);
             return $itemModel->price * $item['quantity'];
@@ -84,6 +91,7 @@ class PaymentController extends Controller
             'payment_intent_id' => $intent->id ?? null
         ]);
         foreach ($data['items'] as $itemData) {
+
             OrderItem::create([
                 'order_id' => $order->id,
                 'item_id' => $itemData['item_id'],

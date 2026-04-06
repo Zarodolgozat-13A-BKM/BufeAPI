@@ -13,6 +13,9 @@ class OrderItemObserver
     public function created(OrderItem $orderItem): void
     {
         Item::where('id', $orderItem->item_id)->decrement('inventory_count', $orderItem->quantity);
+        if (Item::where('id', $orderItem->item_id)->value('inventory_count') <= 2) {
+            Item::where('id', $orderItem->item_id)->update(['is_active' => false]);
+        }
     }
 
     /**
