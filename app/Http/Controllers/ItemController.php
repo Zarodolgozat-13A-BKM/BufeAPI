@@ -61,8 +61,10 @@ class ItemController extends Controller
         $url = null;
         if ($request->hasFile('image')) {
             $url = $request->file('image')->store('itemImages', 'public');
+            $data['picture_url'] = $url;
+        } else {
+            $data['picture_url'] = $item->picture_url;
         }
-        $data['picture_url'] = $url;
         // $item = Item::create($data);
         // $item->update($data);
         $item->update($data);
