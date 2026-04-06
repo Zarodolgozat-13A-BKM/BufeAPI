@@ -24,6 +24,11 @@ return [
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
+    'reverb' => [
+        'key' => env('REVERB_APP_KEY'),
+        'secret' => env('REVERB_APP_SECRET'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
