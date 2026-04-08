@@ -89,4 +89,20 @@ class ItemController extends Controller
         $item->toggleFeatured();
         return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
     }
+
+    public function updateInventoryCount(Request $request)
+    {
+        $data = $request->validate([
+            "items" => "required|array",
+            "items.*.id" => "required|exists:items,id",
+            "items.*.delta" => "required|integer",
+        ]);
+        $itemsChanged = [];
+        foreach ($data['items'] as $itemData) {
+            $item = Item::find($itemData['id']);
+            $item->update(['inventory_count' => $item->inventory_count + $itemData['delta']]);
+            $itemsChanged[] = $item;
+        }
+        return response()->json(['items' => $itemsChanged], 200);
+    }
 }
