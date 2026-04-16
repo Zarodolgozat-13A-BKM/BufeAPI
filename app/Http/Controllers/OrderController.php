@@ -19,7 +19,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all()->where(fn($item) => Gate::allows('view', $item))->paginate(15);
+        // $orders = Order::paginate(15)->where(fn($item) => Gate::allows('view', $item));
+        $orders = Order::paginate(15);
         return response()->json(
             OrderResource::collection($orders),
             200
@@ -28,7 +29,7 @@ class OrderController extends Controller
 
     public function getActiveOrders()
     {
-        $orders = Order::whereIn('status_id', [Status::where('name', 'Fizetésre vár')->first()->id, Status::where('name', 'Fizetve')->first()->id])->get()->where(fn($item) => Gate::allows('view', $item))->paginate(15);
+        $orders = Order::whereIn('status_id', [Status::where('name', 'Fizetésre vár')->first()->id, Status::where('name', 'Fizetve')->first()->id])->get()->where(fn($item) => Gate::allows('view', $item));
         return response()->json(
             OrderResource::collection($orders),
             200
