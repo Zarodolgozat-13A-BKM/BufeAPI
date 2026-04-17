@@ -19,6 +19,7 @@ Route::prefix('account')->controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout')->middleware('auth:sanctum');
     Route::get('details', 'details')->middleware('auth:sanctum');
     Route::post('is-token-still-valid', 'isTokenStillValid');
+    Route::get('reverb-app-secret-and-key', 'getReverbAppSecretAndKey')->middleware('auth:sanctum');
 });
 Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::class)->group(function () {
     Route::get('/', 'index');
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
     Route::post('/', 'create')->can('create', Item::class);
     Route::patch('/{item}', 'update')->can('update', 'item');
     Route::delete('/{item}', 'destroy')->can('delete', 'item');
+    Route::post('/update-inventory', 'updateInventoryCount');
     Route::post('/{item}/toggle-active', 'toggleItemActiveStatus')->can('update', 'item');
     Route::post('/{item}/toggle-featured', 'toggleItemFeaturedStatus')->can('update', 'item');
 });

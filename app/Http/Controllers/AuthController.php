@@ -55,4 +55,12 @@ class AuthController extends Controller
     {
         return response()->json(['valid' => $request->user() !== null]);
     }
+
+    public function getReverbAppSecretAndKey(Request $request)
+    {
+        return response()->json([
+            'key' => config('services.reverb.key'),
+            'secret' => config('services.reverb.secret')
+        ]);
+    }
 }

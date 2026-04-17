@@ -26,6 +26,7 @@ class ItemFactory extends Factory
             'default_time_to_deliver' => fake()->numberBetween(1, 7),
             'is_featured' => fake()->boolean(20),
             'category_id' => Category::inRandomOrder()->first()->id,
+            'inventory_count' => fake()->numberBetween(0, 100)
         ];
     }
 }
