@@ -35,6 +35,7 @@ class ItemController extends Controller
             'default_time_to_deliver' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
+            'inventory_count' => 'sometimes|integer|min:0',
         ]);
         $url = "placeholder.jpg";
         if ($request->hasFile('image')) {
@@ -55,12 +56,15 @@ class ItemController extends Controller
             'default_time_to_deliver' => 'sometimes|required|integer|min:0',
             'category_id' => 'sometimes|required|exists:categories,id',
             'is_featured' => 'sometimes|boolean',
+            'inventory_count' => 'sometimes|integer|min:0',
         ]);
         $url = null;
         if ($request->hasFile('image')) {
             $url = $request->file('image')->store('itemImages', 'public');
+            $data['picture_url'] = $url;
+        } else {
+            $data['picture_url'] = $item->picture_url;
         }
-        $data['picture_url'] = $url;
         // $item = Item::create($data);
         // $item->update($data);
         $item->update($data);
@@ -84,5 +88,21 @@ class ItemController extends Controller
     {
         $item->toggleFeatured();
         return response()->json(['message' => 'Termék státusza sikeresen frissítve', 'item' => ItemResource::make($item)], 200);
+    }
+
+    public function updateInventoryCount(Request $request)
+    {
+        $data = $request->validate([
+            "items" => "required|array",
+            "items.*.id" => "required|exists:items,id",
+            "items.*.delta" => "required|integer",
+        ]);
+        $itemsChanged = [];
+        foreach ($data['items'] as $itemData) {
+            $item = Item::find($itemData['id']);
+            $item->update(['inventory_count' => $item->inventory_count + $itemData['delta']]);
+            $itemsChanged[] = $item;
+        }
+        return response()->json(['items' => $itemsChanged], 200);
     }
 }

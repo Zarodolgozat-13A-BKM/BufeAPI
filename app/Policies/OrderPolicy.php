@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Order;
+use App\Models\Status;
 use App\Models\User;
 
 class OrderPolicy
@@ -20,7 +21,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
-        return $user->isAdmin() || $user->id === $order->user_id;
+        return $user->isAdmin() || ($user->id === $order->user_id && $order->status()->first()->name !== 'Törölve');
     }
 
     /**

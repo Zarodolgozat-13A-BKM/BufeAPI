@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev-and-testing
       - pagination
   workflow_dispatch:
 

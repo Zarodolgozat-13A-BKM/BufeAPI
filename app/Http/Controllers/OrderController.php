@@ -31,7 +31,7 @@ class OrderController extends Controller
     {
         $orders = Order::whereIn('status_id', [Status::where('name', 'Fizetésre vár')->first()->id, Status::where('name', 'Fizetve')->first()->id])->get()->where(fn($item) => Gate::allows('view', $item));
         return response()->json(
-            OrderResource::collection($orders),
+            OrderResource::collection(Order::whereNotIn('status_id', [Status::where('name', 'Átadva')->first()->id, Status::where('name', 'Törölve')->first()->id])->get()->where(fn($item) => Gate::allows('view', $item))),
             200
         );
     }

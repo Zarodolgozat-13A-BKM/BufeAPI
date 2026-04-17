@@ -47,7 +47,7 @@ class PaymentController extends Controller
     {
 
         $data = $request->validate([
-            'delivery_date' => 'nullable|datetime|after:datetime:now',
+            'delivery_date' => 'nullable|date|after:' . now()->toDateString() . 'before_or_equal:' . now()->addDay()->toDateString(),
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -56,6 +56,13 @@ class PaymentController extends Controller
         ]);
 
         $user = $request->user();
+        $isThereEnoughInventory = collect($data['items'])->every(function ($item) {
+            $itemModel = Item::find($item['item_id']);
+            return $itemModel->inventory_count >= $item['quantity'];
+        });
+        if (!$isThereEnoughInventory) {
+            return response()->json(['message' => 'Nincs elég egy vagy több termékből.'], 400);
+        }
         $amount = collect($request['items'])->sum(function ($item) {
             $itemModel = Item::find($item['item_id']);
             return $itemModel->price * $item['quantity'];
@@ -71,7 +78,7 @@ class PaymentController extends Controller
 
         $lastNumber = Order::all()->sortBy('timestamp')?->last()->order_identifier_number ?? 0;
         $number = 1;
-        if ($lastNumber <= 100) {
+        if ($lastNumber < 100) {
             $number = $lastNumber + 1;
         }
 
@@ -83,14 +90,15 @@ class PaymentController extends Controller
             'delivery_date' => $data['delivery_date'] ?? null,
             'payment_intent_id' => $intent->id ?? null
         ]);
-
         foreach ($data['items'] as $itemData) {
+
             OrderItem::create([
                 'order_id' => $order->id,
                 'item_id' => $itemData['item_id'],
                 'quantity' => $itemData['quantity'],
             ]);
         }
+
 
         return response()->json([
             'client_secret' => $intent->client_secret ?? null,
@@ -133,6 +141,12 @@ class PaymentController extends Controller
                 $order->update(['status_id' => Status::where('name', 'Törölve')->first()->id]);
                 break;
 
+            case 'payment_intent.canceled':
+
+                $paymentIntent = $event->data->object;
+                $order = Order::where('payment_intent_id', $paymentIntent->id)->first();
+                $order->update(['status_id' => Status::where('name', 'Törölve')->first()->id]);
+                break;
             case 'charge.refunded':
 
                 $charge = $event->data->object;
@@ -140,6 +154,7 @@ class PaymentController extends Controller
                 break;
 
             default:
+
                 return response()->json(['message' => 'Unhandled event type'], 400);
         }
 
