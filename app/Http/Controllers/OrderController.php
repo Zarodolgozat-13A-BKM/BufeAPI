@@ -21,7 +21,10 @@ class OrderController extends Controller
     {
         // $orders = Order::paginate(15)->where(fn($item) => Gate::allows('view', $item));
         // $orders = Order::paginate(15)->where(fn($item) => Gate::allows('view', $item));
-        $orders = Order::all()->where(fn($item) => Gate::allows('view', $item))->paginate(15);
+        // $orders = Order::all()->where(fn($item) => Gate::allows('view', $item))->paginate(15);
+        $orders = Order::query()
+            ->where(fn($query) => $query->where(fn($item) => Gate::allows('view', $item)))
+            ->paginate(10);
         return OrderResource::collection($orders);
     }
 

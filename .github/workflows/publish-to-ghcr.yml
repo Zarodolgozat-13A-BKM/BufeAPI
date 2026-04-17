@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-      # - dev-and-testing
-      - pagination
+      - dev-and-testing
   workflow_dispatch:
 
 jobs:
