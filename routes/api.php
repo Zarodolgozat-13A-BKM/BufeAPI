@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->prefix('items')->controller(ItemController::c
     Route::post('/', 'create')->can('create', Item::class);
     Route::patch('/{item}', 'update')->can('update', 'item');
     Route::delete('/{item}', 'destroy')->can('delete', 'item');
-    Route::post('/update-inventory', 'updateInventoryCount')->can('update', 'item');
+    Route::post('/update-inventory', 'updateInventoryCount');
     Route::post('/{item}/toggle-active', 'toggleItemActiveStatus')->can('update', 'item');
     Route::post('/{item}/toggle-featured', 'toggleItemFeaturedStatus')->can('update', 'item');
 });
