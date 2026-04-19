@@ -22,7 +22,7 @@ class OrderController extends Controller
         $sortBy = request()->query('sort', 'created_at');
         $sortDirection = request()->query('order', 'asc');
         $orders = Order::query()
-            ->where(fn($query) => $query->where('user_id', auth()->id())->orWhereHas('user', fn($q) => $q->where('is_admin', true)))
+            ->where(fn($query) => $query->where('user_id', auth()->id())->orWhereHas('user', fn($q) => $q->where('role', 'admin')))
             ->orderBy($sortBy, $sortDirection)
             ->paginate(10)
             ->appends(request()->query());
