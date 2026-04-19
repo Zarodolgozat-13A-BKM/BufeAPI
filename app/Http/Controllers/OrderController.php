@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewOrderSubmitted;
-use App\Events\OrderStateChanged;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Status;
 use App\Services\JedlikCsengoService;
-use App\Services\ReceiptManagementService;
 use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
@@ -17,15 +14,22 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sortBy = request()->query('sort', 'created_at');
-        $sortDirection = request()->query('order', 'asc');
+        $sortBy = $request->query('sort', 'created_at');
+        $sortDirection = $request->query('order', 'desc');
+        if ($request->user()->role === 'admin') {
+            $orders = Order::query()
+                ->orderBy($sortBy, $sortDirection)
+                ->paginate(10)
+                ->appends($request->query());
+            return OrderResource::collection($orders);
+        }
         $orders = Order::query()
-            ->where(fn($query) => $query->where('user_id', auth()->id())->orWhereHas('user', fn($q) => $q->where('role', 'admin')))
+            ->where(fn($query) => $query->where('user_id', $request->user()->id))
             ->orderBy($sortBy, $sortDirection)
             ->paginate(10)
-            ->appends(request()->query());
+            ->appends($request->query());
         return OrderResource::collection($orders);
     }
 

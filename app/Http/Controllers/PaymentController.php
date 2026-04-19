@@ -88,7 +88,8 @@ class PaymentController extends Controller
             'status_id' => Status::where('name', 'Fizetésre vár')->first()->id,
             'comment' => $data['comment'] ?? null,
             'delivery_date' => $data['delivery_date'] ?? null,
-            'payment_intent_id' => $intent->id ?? null
+            'payment_intent_id' => $intent->id ?? null,
+            'kiosk_order' => $user->role === 'admin'
         ]);
         foreach ($data['items'] as $itemData) {
 

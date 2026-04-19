@@ -24,8 +24,8 @@ class OrderResource extends JsonResource
             'total_price' => $this->items->sum(fn($item) => $item->pivot->quantity * $item->price),
             'default_completion_time' => $this->items->sum(fn($item) => $item->default_time_to_deliver),
             'comment' => $this->comment,
-            'payment_intent_id' => $this->payment_intent_id
-
+            'payment_intent_id' => $this->payment_intent_id,
+            'kiosk_order' => $this->kiosk_order
         ];
     }
 }

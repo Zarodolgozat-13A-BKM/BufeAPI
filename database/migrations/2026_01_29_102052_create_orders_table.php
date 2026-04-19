@@ -20,6 +20,7 @@ return new class extends Migration
             $table->datetime('delivery_date')->nullable()->useCurrent();
             $table->string('payment_intent_id')->nullable();
             $table->string('comment')->nullable();
+            $table->boolean('kiosk_order')->default(false);
         });
     }
 

@@ -19,7 +19,8 @@ class Order extends Model
         'status_id',
         'delivery_date',
         'payment_intent_id',
-        'comment'
+        'comment',
+        'kiosk_order'
     ];
 
     public function status()
