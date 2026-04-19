@@ -19,12 +19,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        // $orders = Order::paginate(15)->where(fn($item) => Gate::allows('view', $item));
-        // $orders = Order::paginate(15)->where(fn($item) => Gate::allows('view', $item));
-        // $orders = Order::all()->where(fn($item) => Gate::allows('view', $item))->paginate(15);
+        $sortBy = request()->query('sort', 'created_at');
+        $sortDirection = request()->query('order', 'asc');
         $orders = Order::query()
-            ->where(fn($query) => $query->where(fn($item) => Gate::allows('view', $item)))
-            ->paginate(10);
+            ->where(fn($query) => $query->where('user_id', auth()->id())->orWhereHas('user', fn($q) => $q->where('is_admin', true)))
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(10)
+            ->appends(request()->query());
         return OrderResource::collection($orders);
     }
 
